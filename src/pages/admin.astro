@@ -1,0 +1,281 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title={`Admin — ${site.name}`} description="PTPN admin">
+  <div class="wrap" style="padding:72px 0 56px">
+    <span class="mono" style="color:var(--gold)">Admin</span>
+    <h1 style="margin-top:10px">PTPN ops</h1>
+    <p class="lede" style="margin-top:14px;max-width:62ch">Sign in with your coach account (the same one as the app — <code>nevespedro.pt@gmail.com</code>). You manage enquiries, packages and the manual payment ledger here. Clients never see this.</p>
+
+    <div id="admin-auth" style="margin-top:28px" class="card">
+      <div id="auth-forms" style="display:grid;gap:16px;max-width:420px">
+        <div style="display:grid;gap:10px">
+          <label for="a-email">Email</label>
+          <input id="a-email" type="email" autocomplete="email" placeholder="nevespedro.pt@gmail.com" />
+          <label for="a-pass">Password</label>
+          <input id="a-pass" type="password" autocomplete="current-password" placeholder="••••••••" />
+          <button class="btn btn--primary" id="a-login" type="button">Sign in</button>
+          <button class="btn btn--ghost" id="a-logout" type="button" style="display:none">Sign out</button>
+          <p id="a-msg" class="fine" aria-live="polite" style="min-height:1.2em"></p>
+        </div>
+        <p class="fine">Not a coach? You will see “not authorised” — only <code>is_coach()</code> can read enquiries and edit packages/payments (enforced in the database, not just here).</p>
+      </div>
+    </div>
+
+    <div id="admin-app" style="display:none;margin-top:36px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
+        <button class="btn btn--ghost btn--sm" data-tab="enquiries" type="button">Enquiries</button>
+        <button class="btn btn--ghost btn--sm" data-tab="packages" type="button">Packages</button>
+        <button class="btn btn--ghost btn--sm" data-tab="payments" type="button">Payments</button>
+        <button class="btn btn--ghost btn--sm" data-tab="sessions" type="button">Sessions</button>
+      </div>
+
+      <!-- ENQUIRIES -->
+      <section data-panel="enquiries" class="card">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+          <h2 style="font-size:22px">Enquiries</h2>
+          <div style="display:flex;gap:8px">
+            <select id="eq-filter"><option value="">All</option><option>new</option><option>contacted</option><option>converted</option><option>lost</option><option>spam</option></select>
+            <button class="btn btn--ghost btn--sm" id="eq-reload" type="button">Reload</button>
+          </div>
+        </div>
+        <div id="eq-list" style="margin-top:18px;display:grid;gap:10px"></div>
+        <p class="fine" style="margin-top:12px">Status change triggers the email if Resend is configured — otherwise it just updates the row. “Resend email” calls the edge function for that enquiry.</p>
+      </section>
+
+      <!-- PACKAGES -->
+      <section data-panel="packages" class="card" style="display:none">
+        <h2 style="font-size:22px">Client packages</h2>
+        <p class="fine" style="margin-top:6px">Assign a pack a client bought. Sessions remaining = total − used. Completes automatically when you push a booking through, or mark here.</p>
+        <form id="pkg-form" style="display:grid;gap:12px;margin-top:18px;max-width:560px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div><label for="pkg-client">Client (email or id)</label><input id="pkg-client" required placeholder="client@email or uuid" /></div>
+            <div><label for="pkg-name">Package</label>
+              <select id="pkg-name"><option>Express</option><option>Ignition</option><option>Momentum</option><option>Signature</option><option>Duo</option></select></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <div><label for="pkg-total">Sessions total</label><input id="pkg-total" type="number" min="1" value="12" required /></div>
+            <div><label for="pkg-price">Total £</label><input id="pkg-price" type="number" min="0" step="0.01" value="480.00" required /></div>
+            <div><label for="pkg-used">Used</label><input id="pkg-used" type="number" min="0" value="0" /></div>
+          </div>
+          <button class="btn btn--primary" type="submit">Add package</button>
+          <p id="pkg-msg" class="fine" aria-live="polite" style="min-height:1.2em"></p>
+        </form>
+        <div id="pkg-list" style="margin-top:22px;display:grid;gap:10px"></div>
+        <div id="balances" style="margin-top:22px"></div>
+      </section>
+
+      <!-- PAYMENTS -->
+      <section data-panel="payments" class="card" style="display:none">
+        <h2 style="font-size:22px">Payments ledger</h2>
+        <p class="fine" style="margin-top:6px">You record amounts — no checkout, no Stripe. Positive = paid, negative = refund. Balance = owed − paid.</p>
+        <form id="pay-form" style="display:grid;gap:12px;margin-top:18px;max-width:560px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div><label for="pay-client">Client (email or id)</label><input id="pay-client" required placeholder="client@email or uuid" /></div>
+            <div><label for="pay-amount">Amount £</label><input id="pay-amount" type="number" step="0.01" required placeholder="120.00" /></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <div><label for="pay-method">Method</label><select id="pay-method"><option>cash</option><option>bank</option><option>other</option></select></div>
+            <div><label for="pay-date">Paid on</label><input id="pay-date" type="date" /></div>
+            <div><label for="pay-note">Note</label><input id="pay-note" placeholder="Deposit" /></div>
+          </div>
+          <button class="btn btn--primary" type="submit">Record payment</button>
+          <p id="pay-msg" class="fine" aria-live="polite" style="min-height:1.2em"></p>
+        </form>
+        <div id="pay-list" style="margin-top:22px;display:grid;gap:10px"></div>
+      </section>
+
+      <!-- SESSIONS -->
+      <section data-panel="sessions" class="card" style="display:none">
+        <h2 style="font-size:22px">Sessions &amp; bookings</h2>
+        <p class="fine" style="margin-top:6px">Reuses the app's <code>sessions</code> / <code>bookings</code> tables — anything you create here appears in the app, and vice versa.</p>
+        <form id="sess-form" style="display:grid;gap:12px;margin-top:18px;max-width:560px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div><label for="sess-at">Starts at</label><input id="sess-at" type="datetime-local" required /></div>
+            <div><label for="sess-dur">Duration min</label><input id="sess-dur" type="number" min="15" value="60" /></div>
+          </div>
+          <div><label for="sess-title">Title</label><input id="sess-title" value="PT session" /></div>
+          <button class="btn btn--primary" type="submit">Create slot</button>
+          <p id="sess-msg" class="fine" aria-live="polite" style="min-height:1.2em"></p>
+        </form>
+        <div id="sess-list" style="margin-top:22px;display:grid;gap:10px"></div>
+      </section>
+    </div>
+  </div>
+
+  <style>
+    .card{background:var(--surface);border:1px solid var(--line);padding:22px}
+    code{background:#1e1e20;padding:2px 6px;border-radius:3px;font-size:13px}
+    .row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid var(--line)}
+    .row:last-child{border-bottom:0}
+    .badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border:1px solid var(--line-2)}
+    .badge.new{border-color:var(--gold);color:var(--gold-light)}
+  </style>
+
+  <script>
+    import { supabase } from '../lib/supabase';
+    const $ = (s: string) => document.querySelector(s) as HTMLElement | null;
+    const msg = $('#a-msg') as HTMLElement;
+    const app = $('#admin-app') as HTMLElement;
+    const loginBtn = $('#a-login') as HTMLButtonElement;
+    const logoutBtn = $('#a-logout') as HTMLButtonElement;
+    const emailI = $('#a-email') as HTMLInputElement;
+    const passI = $('#a-pass') as HTMLInputElement;
+
+    function setTab(name: string) {
+      document.querySelectorAll('[data-panel]').forEach(el => (el as HTMLElement).style.display = (el as HTMLElement).dataset.panel === name ? '' : 'none');
+      document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('is-active', (b as HTMLElement).dataset.tab === name));
+      if (name === 'enquiries') loadEnquiries();
+      if (name === 'packages') { loadPackages(); loadBalances(); }
+      if (name === 'payments') loadPayments();
+      if (name === 'sessions') loadSessions();
+    }
+    document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => setTab((b as HTMLElement).dataset.tab!)));
+
+    function say(t: string, ok = true) { if (msg) { msg.textContent = t; msg.style.color = ok ? 'var(--gold-light)' : '#f0a0a0'; } }
+
+    async function refreshAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { app.style.display = 'none'; loginBtn.style.display = ''; logoutBtn.style.display = 'none'; say('Not signed in.'); return; }
+      // verify coach via is_coach() — RLS is the real gate, this is just UX
+      const { data: isCoach } = await supabase.rpc('is_coach');
+      if (isCoach !== true) { app.style.display = 'none'; loginBtn.style.display = 'none'; logoutBtn.style.display = ''; say('Signed in but not a coach — is_coach() is false. Only the coach can use this page.', false); return; }
+      app.style.display = ''; loginBtn.style.display = 'none'; logoutBtn.style.display = ''; emailI.style.display = 'none'; passI.style.display = 'none';
+      say(`Signed in as ${session.user.email} · coach ✓`);
+      setTab('enquiries');
+    }
+
+    loginBtn?.addEventListener('click', async () => {
+      const email = emailI.value.trim(), password = passI.value;
+      if (!email || !password) { say('Email and password required.', false); return; }
+      loginBtn.disabled = true; loginBtn.textContent = '…';
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      loginBtn.disabled = false; loginBtn.textContent = 'Sign in';
+      if (error) { say(error.message, false); return; }
+      await refreshAuth();
+    });
+    logoutBtn?.addEventListener('click', async () => { await supabase.auth.signOut(); location.reload(); });
+    supabase.auth.onAuthStateChange(() => refreshAuth());
+    refreshAuth();
+
+    // --- Enquiries
+    async function loadEnquiries() {
+      const status = (document.getElementById('eq-filter') as HTMLSelectElement)?.value ?? '';
+      let q = supabase.from('enquiries').select('*').order('created_at', { ascending: false }).limit(100);
+      if (status) q = q.eq('status', status);
+      const { data, error } = await q;
+      const el = document.getElementById('eq-list')!;
+      if (error) { el.textContent = error.message; return; }
+      if (!data?.length) { el.innerHTML = '<p class="fine">No enquiries yet — submit the form on the home page to test.</p>'; return; }
+      el.innerHTML = data.map((r: any) => `
+        <div class="row">
+          <div style="min-width:220px"><b>${esc(r.name)}</b> · ${esc(r.email)} ${r.phone?`· ${esc(r.phone)}`:''}<br/><span class="fine">${new Date(r.created_at).toLocaleString('en-GB')} · ${esc(r.package)} · goal ${esc(r.goal)} · ${esc(r.frequency)}</span><br/><span style="margin-top:6px;display:block;white-space:pre-wrap">${esc(r.message||'—')}</span></div>
+          <div style="display:flex;gap:8px;align-items:start;flex-wrap:wrap">
+            <span class="badge ${r.status==='new'?'new':''}">${esc(r.status)}</span>
+            <select data-eq-status="${r.id}" style="min-width:130px"><option ${r.status==='new'?'selected':''}>new</option><option ${r.status==='contacted'?'selected':''}>contacted</option><option ${r.status==='converted'?'selected':''}>converted</option><option ${r.status==='lost'?'selected':''}>lost</option><option ${r.status==='spam'?'selected':''}>spam</option></select>
+            <button class="btn btn--ghost btn--sm" data-resend="${r.id}" type="button">Resend email</button>
+          </div>
+        </div>`).join('');
+      el.querySelectorAll('[data-eq-status]').forEach(s => s.addEventListener('change', async (e) => {
+        const id = (e.target as HTMLElement).dataset.eqStatus!, val = (e.target as HTMLSelectElement).value;
+        const { error } = await supabase.from('enquiries').update({ status: val }).eq('id', id);
+        if (error) say(error.message, false); else say('Updated ✓');
+      }));
+      el.querySelectorAll('[data-resend]').forEach(b => b.addEventListener('click', async (e) => {
+        const id = (e.target as HTMLElement).dataset.resend!;
+        const url = `${import.meta.env.PUBLIC_SUPABASE_URL}/functions/v1/send-enquiry-email`;
+        const anon = import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string;
+        const r = await fetch(url, { method:'POST', headers:{ 'Content-Type':'application/json', apikey: anon, Authorization:`Bearer ${anon}` }, body: JSON.stringify({ enquiry_id: id }) });
+        const j = await r.json().catch(()=>({}));
+        say(r.ok ? `Email ${j.emailed?'sent ✓':'queued (add RESEND_API_KEY to actually send)'} ` : `Email failed: ${j.error||r.status}`, r.ok);
+      }));
+    }
+    function esc(s: string){ return String(s).replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]!)); }
+    document.getElementById('eq-filter')?.addEventListener('change', loadEnquiries);
+    document.getElementById('eq-reload')?.addEventListener('click', loadEnquiries);
+
+    // --- Packages
+    async function resolveClientId(input: string): Promise<string|null> {
+      input=input.trim(); if (/^[0-9a-f-]{36}$/i.test(input)) return input;
+      const { data } = await supabase.from('profiles').select('id').ilike('full_name', `%${input}%`).limit(1);
+      // also try by email via auth is not queryable — fall back to profiles full_name; if not found, treat as id
+      if (data?.[0]?.id) return data[0].id;
+      // try exact email lookup via profiles (full_name may hold email for some)
+      const { data: byEmail } = await supabase.from('profiles').select('id').eq('id', input).limit(1);
+      return byEmail?.[0]?.id ?? null;
+    }
+    // simpler: client field accepts uuid; for email we look up via a helper — but profiles has no email column.
+    // So we accept uuid; show a note.
+    async function loadPackages(){
+      const { data, error } = await supabase.from('client_packages').select('*').order('created_at',{ascending:false}).limit(80);
+      const el=document.getElementById('pkg-list')!;
+      if(error){ el.textContent=error.message; return; }
+      if(!data?.length){ el.innerHTML='<p class="fine">No packages yet.</p>'; return; }
+      el.innerHTML=data.map((r:any)=>`<div class="row"><span><b>${esc(r.package_name)}</b> · ${r.sessions_used}/${r.sessions_total} used · £${Number(r.total_gbp).toFixed(2)} · ${esc(r.status)}<br/><span class="fine">${r.client_id} · since ${r.started_on}</span></span><span class="badge">${esc(r.status)}</span></div>`).join('');
+    }
+    async function loadBalances(){
+      const { data } = await supabase.from('client_balances').select('*').limit(100);
+      const el=document.getElementById('balances')!;
+      if(!data?.length){ el.innerHTML=''; return; }
+      const rows=data.filter((r:any)=> Number(r.owed_gbp)!==0 || Number(r.paid_gbp)!==0).slice(0,20);
+      if(!rows.length){ el.innerHTML=''; return; }
+      el.innerHTML='<h3 style="font-size:16px;margin-bottom:8px">Balances (owed − paid)</h3>'+rows.map((r:any)=>`<div class="row"><span class="fine">${r.client_id}</span><span><b>£${Number(r.balance_gbp).toFixed(2)}</b> <span class="fine">(owed £${Number(r.owed_gbp).toFixed(2)} · paid £${Number(r.paid_gbp).toFixed(2)})</span></span></div>`).join('');
+    }
+    document.getElementById('pkg-form')?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const clientRaw=(document.getElementById('pkg-client') as HTMLInputElement).value.trim();
+      const m=document.getElementById('pkg-msg') as HTMLElement;
+      let client_id = /^[0-9a-f-]{36}$/i.test(clientRaw) ? clientRaw : null;
+      if(!client_id){
+        // try to resolve by listing profiles and matching email/name — profiles has no email, so we need the id
+        m.textContent='Please paste the client UUID (from Clients in the app — open a client, copy the id from the URL). Email lookup needs the id.'; m.style.color='#f0a0a0'; return;
+      }
+      const payload={ client_id, package_name:(document.getElementById('pkg-name') as HTMLSelectElement).value, sessions_total: Number((document.getElementById('pkg-total') as HTMLInputElement).value), total_gbp: Number((document.getElementById('pkg-price') as HTMLInputElement).value), sessions_used: Number((document.getElementById('pkg-used') as HTMLInputElement).value) };
+      const { error } = await supabase.from('client_packages').insert(payload);
+      m.textContent = error ? error.message : 'Package added ✓'; m.style.color = error ? '#f0a0a0' : 'var(--gold-light)';
+      if(!error) { loadPackages(); loadBalances(); }
+    });
+
+    // --- Payments
+    async function loadPayments(){
+      const { data, error } = await supabase.from('payments').select('*').order('paid_on',{ascending:false}).limit(80);
+      const el=document.getElementById('pay-list')!;
+      if(error){ el.textContent=error.message; return; }
+      if(!data?.length){ el.innerHTML='<p class="fine">No payments yet.</p>'; return; }
+      el.innerHTML=data.map((r:any)=>`<div class="row"><span>£${Number(r.amount_gbp).toFixed(2)} · ${esc(r.method)} · ${r.paid_on}<br/><span class="fine">${r.client_id}${r.note?` · ${esc(r.note)}`:''}</span></span><span class="fine">${new Date(r.created_at).toLocaleString('en-GB')}</span></div>`).join('');
+    }
+    // default date today
+    const d=(document.getElementById('pay-date') as HTMLInputElement); if(d) d.valueAsDate=new Date();
+    document.getElementById('pay-form')?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const clientRaw=(document.getElementById('pay-client') as HTMLInputElement).value.trim();
+      const m=document.getElementById('pay-msg') as HTMLElement;
+      let client_id = /^[0-9a-f-]{36}$/i.test(clientRaw) ? clientRaw : null;
+      if(!client_id){ m.textContent='Paste the client UUID (see Packages note).'; m.style.color='#f0a0a0'; return; }
+      const payload={ client_id, amount_gbp: Number((document.getElementById('pay-amount') as HTMLInputElement).value), method:(document.getElementById('pay-method') as HTMLSelectElement).value, paid_on:(document.getElementById('pay-date') as HTMLInputElement).value || new Date().toISOString().slice(0,10), note:(document.getElementById('pay-note') as HTMLInputElement).value.trim() };
+      if(!payload.amount_gbp){ m.textContent='Amount required.'; m.style.color='#f0a0a0'; return; }
+      const { error } = await supabase.from('payments').insert(payload);
+      m.textContent = error ? error.message : 'Payment recorded ✓'; m.style.color = error ? '#f0a0a0' : 'var(--gold-light)';
+      if(!error) { loadPayments(); loadBalances(); }
+    });
+
+    // --- Sessions
+    async function loadSessions(){
+      const { data } = await supabase.from('sessions').select('*').order('starts_at',{ascending:true}).limit(30);
+      const { data: bookings } = await supabase.from('bookings').select('session_id');
+      const booked=new Set((bookings??[]).map((b:any)=>b.session_id));
+      const el=document.getElementById('sess-list')!;
+      if(!data?.length){ el.innerHTML='<p class="fine">No slots yet.</p>'; return; }
+      el.innerHTML=data.map((r:any)=>`<div class="row"><span><b>${esc(r.title)}</b> · ${new Date(r.starts_at).toLocaleString('en-GB')} · ${r.duration_min} min<br/><span class="fine">${r.id}</span></span><span class="badge ${booked.has(r.id)?'new':''}">${booked.has(r.id)?'booked':'free'}</span></div>`).join('');
+    }
+    document.getElementById('sess-form')?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const m=document.getElementById('sess-msg') as HTMLElement;
+      const payload={ starts_at: new Date((document.getElementById('sess-at') as HTMLInputElement).value).toISOString(), duration_min: Number((document.getElementById('sess-dur') as HTMLInputElement).value), title:(document.getElementById('sess-title') as HTMLInputElement).value.trim()||'PT session' };
+      const { error } = await supabase.from('sessions').insert(payload);
+      m.textContent = error ? error.message : 'Slot created ✓'; m.style.color = error ? '#f0a0a0' : 'var(--gold-light)';
+      if(!error) loadSessions();
+    });
+  </script>
+</Base>

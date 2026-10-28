@@ -1,0 +1,180 @@
+---
+import { nav, site } from '../data/site';
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+<header class="hdr" id="hdr">
+  <div class="wrap hdr__inner">
+    <a class="hdr__brand" href="/" aria-label="PTPN, home">
+      <img src="/brand/ptpn-lockup-520.png" alt="PTPN, Be fit" width="520" height="227" />
+    </a>
+
+    <nav class="hdr__nav" aria-label="Main">
+      {nav.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="hdr__cta">
+      <a class="hdr__login" href={site.appPath}>Member log in</a>
+      <a class="btn btn--primary btn--sm" href="#contact">Free consultation</a>
+    </div>
+
+    <button class="hdr__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="drawer" id="drawer" hidden>
+    <nav class="wrap drawer__nav" aria-label="Mobile">
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href="#contact">Free consultation</a>
+      <a class="drawer__login" href={site.appPath}>Member log in</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: 70;
+    background: rgba(17, 17, 18, .92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid #1f1f21;
+  }
+
+  .hdr__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 88px;
+  }
+
+  .hdr__brand img { width: 170px; }
+
+  .hdr__nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .hdr__nav a {
+    font-size: 14.5px;
+    color: var(--muted);
+    transition: color .2s;
+  }
+
+  .hdr__nav a:hover,
+  .hdr__nav a[aria-current='page'] { color: var(--gold-light); }
+
+  .hdr__cta {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .hdr__login {
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    border-bottom: 1px solid var(--gold-deep);
+    padding-bottom: 3px;
+  }
+
+  /* burger */
+  .hdr__burger {
+    display: none;
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    background: none;
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    cursor: pointer;
+    padding: 0;
+    place-items: center;
+    gap: 5px;
+  }
+
+  .hdr__burger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--ink);
+    transition: transform .3s var(--ease), opacity .2s;
+  }
+
+  .hdr__burger[aria-expanded='true'] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hdr__burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+  .hdr__burger[aria-expanded='true'] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* drawer */
+  .drawer {
+    border-top: 1px solid #1f1f21;
+    background: var(--bg);
+  }
+
+  .drawer__nav {
+    display: grid;
+    gap: 4px;
+    padding-block: 18px 26px;
+  }
+
+  .drawer__nav a {
+    font-family: var(--display);
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -.015em;
+    padding-block: 13px;
+    border-bottom: 1px solid #1f1f21;
+  }
+
+  .drawer__login {
+    color: var(--gold-light);
+    border-bottom: 0 !important;
+  }
+
+  @media (max-width: 1080px) {
+    .hdr__nav,
+    .hdr__cta { display: none; }
+    .hdr__burger { display: grid; }
+  }
+
+  @media (max-width: 480px) {
+    .hdr__brand img { width: 142px; }
+    .hdr__inner { min-height: 74px; }
+  }
+</style>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('.hdr__burger');
+  const drawer = document.getElementById('drawer');
+
+  if (burger && drawer) {
+    const setOpen = (open: boolean) => {
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      drawer.hidden = !open;
+    };
+
+    burger.addEventListener('click', () => {
+      setOpen(burger.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // close on Escape, and whenever the viewport grows past the breakpoint
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    const mq = window.matchMedia('(min-width: 1081px)');
+    mq.addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+</script>

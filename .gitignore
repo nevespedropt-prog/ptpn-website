@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.local
+.bundle.js
+*.log
+.cr/
+00PHOTOS/
+assets/
+screenshots/
+hero-options/

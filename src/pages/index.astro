@@ -1,0 +1,911 @@
+---
+import { site, coach } from '../data/site';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import Packages from '../components/Packages.astro';
+import Faq from '../components/Faq.astro';
+import Testimonials from '../components/Testimonials.astro';
+const title = site.title;
+const description = site.description;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/images/hero-seated.jpg', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="icon" href="/brand/ptpn-favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta name="theme-color" content="#08080a" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300..700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#08080a; --bg-2:#0c0c0f; --bg-3:#101013;
+  --ink:#f4f1ea; --ink-2:#cfcbc2; --muted:#8d8d93; --faint:#5f5f66;
+  --gold:#d7b978; --gold-light:#f1dda9; --gold-deep:#a67c2e;
+  --line:rgba(255,255,255,.10); --line-gold:rgba(215,185,120,.24);
+  --serif:'Source Serif 4',Georgia,serif; --body:'Inter',system-ui,sans-serif; --mono:'IBM Plex Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --wrap:1320px; --gut:48px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+html{scroll-behavior:auto}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.locked{overflow:hidden;height:100vh}
+.wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
+
+/* ---------- grain + cursor ---------- */
+.grain{position:fixed;inset:0;z-index:95;pointer-events:none;opacity:.035;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.cur,.cur-d{position:fixed;top:0;left:0;z-index:99;pointer-events:none;border-radius:50%;
+  transform:translate(-50%,-50%);opacity:0;transition:opacity .3s}
+.cur{width:7px;height:7px;background:var(--gold-light)}
+.cur-d{width:34px;height:34px;border:1px solid rgba(215,185,120,.5);transition:opacity .3s,width .3s var(--ease),height .3s var(--ease),background .3s var(--ease),border-color .3s}
+.cur-d.grow{width:64px;height:64px;background:rgba(215,185,120,.08);border-color:rgba(215,185,120,.7)}
+@media (hover:none),(prefers-reduced-motion:reduce){.cur,.cur-d{display:none}}
+
+/* ---------- intro curtain ---------- */
+.intro{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.intro img{width:150px;opacity:0;transform:translateY(12px)}
+.intro__bar{position:absolute;left:0;bottom:0;height:2px;width:0;background:linear-gradient(90deg,var(--gold-deep),var(--gold-light))}
+.no-motion .intro{display:none}
+
+/* ---------- type ---------- */
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(50px,8.4vw,124px);line-height:.96;letter-spacing:-.022em;color:#fff}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(32px,4.2vw,62px);line-height:1.05;letter-spacing:-.018em}
+h3{font-family:var(--serif);font-weight:600;font-size:clamp(21px,2vw,28px);line-height:1.16}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light)}
+.eyebrow::before{content:"";width:30px;height:1px;background:rgba(215,185,120,.6)}
+.lede{font-size:17.5px;line-height:1.68;color:var(--muted);max-width:58ch}
+
+/* split-line masks.
+   padding + negative margin gives ascenders and descenders room, so a tight
+   line-height does not clip the top of "C" or the tail of "g". */
+.mask{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
+.mask>.ln{display:block;transform:translateY(105%)}
+.hero h1 .mask>.ln{transform:translateY(105%)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 30px;
+  border-radius:0;font-size:15px;font-weight:500;background:var(--gold);color:#0b0a06;border:1px solid var(--gold);
+  transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease);
+  will-change:transform}
+.btn:hover{background:var(--gold-light);border-color:var(--gold-light)}
+.btn--ghost{background:transparent;color:var(--ink);border-color:rgba(215,185,120,.55)}
+.btn--ghost:hover{background:rgba(215,185,120,.1);border-color:var(--gold);color:var(--gold-light)}
+.btn--sm{min-height:44px;padding:0 22px;font-size:14px}
+
+/* underline draw */
+.ul{position:relative}
+.ul::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:1px;background:var(--gold-light);
+  transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.ul:hover::after{transform:scaleX(1);transform-origin:left}
+
+/* ---------- nav ---------- */
+header{position:fixed;top:0;left:0;right:0;z-index:80;transition:background .5s var(--ease),border-color .5s var(--ease)}
+header.solid{background:rgba(8,8,10,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:80px}
+.nav img{width:136px}
+.nav ul{display:flex;gap:34px;list-style:none}
+.nav ul a{font-size:14.5px;color:rgba(244,241,234,.9);transition:color .3s var(--ease)}
+.nav ul a:hover{color:var(--gold-light)}
+.nav__r{display:flex;align-items:center;gap:22px}
+.nav__r a{font-size:14.5px;color:rgba(244,241,234,.9)}
+
+/* ---------- 1. HERO (kept from mock 1) ---------- */
+.hero{position:relative;height:100vh;min-height:680px;overflow:hidden;background:#000}
+.hero__media{position:absolute;inset:0;will-change:transform}
+.hero__media img{width:100%;height:100%;object-fit:cover;object-position:52% 38%;will-change:transform}
+.hero::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(6,6,8,.74) 0%,rgba(6,6,8,.22) 32%,rgba(6,6,8,.95) 100%)}
+.hero__in{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:80px}
+.hero h1{max-width:15ch}
+.hero__sub{margin-top:26px;font-size:18px;line-height:1.62;color:rgba(244,241,234,.8);max-width:44ch}
+.hero__cta{display:flex;gap:12px;margin-top:38px;flex-wrap:wrap}
+.hero__scroll{position:absolute;right:var(--gut);bottom:80px;z-index:3;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.24em;text-transform:uppercase;color:rgba(244,241,234,.6);writing-mode:vertical-rl}
+.hero__scroll::after{content:"";display:block;width:1px;height:52px;margin:14px auto 0;
+  background:linear-gradient(180deg,var(--gold),transparent)}
+
+/* ---------- marquee ---------- */
+.press{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;overflow:hidden;background:var(--bg-2)}
+.marquee{display:flex;gap:64px;width:max-content;will-change:transform}
+.press span{font-family:var(--serif);font-size:19px;font-weight:600;color:rgba(215,185,120,.4);white-space:nowrap}
+.press i{color:rgba(215,185,120,.26);font-style:normal}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.stats div{padding:46px 30px;border-right:1px solid var(--line)}
+.stats div:last-child{border-right:0}
+.stats b{display:block;font-family:var(--serif);font-size:clamp(36px,4.2vw,62px);font-weight:600;letter-spacing:-.02em;color:var(--gold-light)}
+.stats span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+
+.pad{padding:118px 0}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:66px}
+
+/* ---------- 2. PINNED APP (CSS sticky) ---------- */
+.pinned{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative}
+.pinned__grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.pinned__stage{position:sticky;top:calc(50vh - 320px);display:flex;justify-content:center;padding:40px 0}
+.pinned__copy{padding:8vh 0}
+.step{min-height:54vh;display:flex;flex-direction:column;justify-content:center;
+  opacity:.34;transition:opacity .5s var(--ease);border-top:1px solid var(--line)}
+.step:last-of-type{border-bottom:1px solid var(--line)}
+.step.active{opacity:1}
+.step h3{display:flex;align-items:baseline;gap:16px}
+.step h3 i{font-family:var(--mono);font-size:11px;font-style:normal;letter-spacing:.2em;color:var(--gold)}
+.step p{margin-top:14px;font-size:16.5px;line-height:1.7;color:var(--muted);max-width:44ch;padding-left:38px}
+.rail-line{position:relative}
+.rail-line::before{content:"";position:absolute;left:0;top:0;width:1px;height:100%;background:var(--line)}
+.rail-line::after{content:"";position:absolute;left:0;top:0;width:1px;height:0;background:var(--gold)}
+.pinned__bar{position:sticky;top:0;height:2px;background:var(--gold);transform-origin:left;transform:scaleX(0);z-index:5}
+
+/* the phone */
+.phone{width:316px;border-radius:46px;padding:11px;background:linear-gradient(180deg,#26262c,#131316);
+  box-shadow:0 60px 130px -40px rgba(0,0,0,.95),0 0 0 1px rgba(215,185,120,.18);will-change:transform}
+.screen{border-radius:36px;background:#0b0b0e;overflow:hidden;position:relative;height:600px}
+.sface{position:absolute;inset:0;padding:26px 20px;opacity:0;transform:translateY(16px);
+  transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.sface.on{opacity:1;transform:none}
+.sface__top{display:flex;justify-content:space-between;align-items:center}
+.sface__top span{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+  color:#8ad3a2;background:rgba(138,211,162,.1);padding:5px 9px;border-radius:999px;text-transform:uppercase}
+.chip i{width:5px;height:5px;border-radius:50%;background:#8ad3a2;display:block}
+.sface h4{font-family:var(--serif);font-size:17px;font-weight:600;margin-top:20px}
+.big{font-family:var(--serif);font-size:52px;font-weight:600;letter-spacing:-.03em;color:var(--gold-light);margin-top:6px;line-height:1}
+.big small{font-family:var(--body);font-size:14px;color:var(--muted);font-weight:400;letter-spacing:0}
+.srows div{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.srows span{color:var(--muted)}
+.sbars{margin-top:20px;display:flex;flex-direction:column;gap:14px}
+.sbars .lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.sbars .t{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.sbars .t i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--gold-deep),var(--gold-light));
+  transition:width 1.1s var(--ease)}
+.smsg{margin-top:16px;background:var(--bg-3);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13.5px;line-height:1.55}
+.av{display:flex;align-items:center;gap:11px;margin-top:16px}
+.av i{width:32px;height:32px;border-radius:50%;background:linear-gradient(140deg,var(--gold-deep),var(--gold-light));display:block;flex:0 0 32px}
+.av b{font-size:13.5px;font-weight:500;display:block}
+.av small{font-size:11.5px;color:var(--muted)}
+
+/* ---------- split with clip reveal ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.split__media{position:relative;overflow:hidden;min-height:600px}
+.split__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  clip-path:inset(0 0 100% 0);will-change:transform,clip-path}
+.split__copy{padding:90px 62px;display:flex;flex-direction:column;justify-content:center;border-left:1px solid var(--line)}
+.split__copy p{margin-top:22px;font-size:17px;line-height:1.72;color:var(--muted)}
+.split__copy .btn{margin-top:34px;align-self:flex-start}
+
+/* ---------- method ---------- */
+.method{border-top:1px solid var(--line)}
+.mrow{display:grid;grid-template-columns:92px 1fr 1.35fr;gap:40px;align-items:start;padding:48px 0;
+  border-bottom:1px solid var(--line);transition:background .5s var(--ease),padding-left .5s var(--ease)}
+.mrow:hover{background:var(--bg-3);padding-left:22px}
+.mn{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--gold)}
+.mrow p{font-size:16px;line-height:1.7;color:var(--muted)}
+
+/* ---------- statement ---------- */
+.statement{position:relative;background:#0a0a0c;padding:160px 0;overflow:hidden;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.statement__bg{position:absolute;inset:-12% 0;opacity:.24}
+.statement__bg img{width:100%;height:100%;object-fit:cover;will-change:transform}
+.statement__in{position:relative;z-index:2}
+.statement h2{color:#fff;max-width:22ch}
+.statement p{margin-top:28px;font-size:18px;line-height:1.7;color:rgba(244,241,234,.68);max-width:56ch}
+
+/* ---------- results: sticky stack ---------- */
+.stack{position:relative;padding-bottom:14vh}
+.scard{position:sticky;top:calc(16vh + var(--i) * 16px);margin-bottom:26px;
+  border:1px solid var(--line);background:var(--bg-2);display:grid;grid-template-columns:340px 1fr;
+  box-shadow:0 -20px 60px -30px rgba(0,0,0,.9);overflow:hidden}
+.scard__img{aspect-ratio:4/5;overflow:hidden;background:#111}
+.scard__img img{width:100%;height:100%;object-fit:cover}
+.scard__body{padding:44px 46px;display:flex;flex-direction:column;justify-content:center}
+.scard__body b{font-family:var(--serif);font-size:clamp(24px,2.4vw,34px);font-weight:600;line-height:1.22}
+.scard__body p{font-size:16.5px;line-height:1.7;color:var(--muted);margin-top:18px;max-width:52ch}
+.scard__body span{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-top:26px}
+
+/* ---------- cta ---------- */
+.cta{padding:150px 0;text-align:center;border-top:1px solid var(--line)}
+.cta h2{max-width:22ch;margin:0 auto}
+.cta .lede{margin:26px auto 0}
+.cta .btn{margin-top:42px}
+
+footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
+.foot{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:44px}
+.foot img{width:124px}
+.foot p{font-size:14.5px;color:var(--muted);margin-top:18px;line-height:1.7;max-width:36ch}
+.foot h5{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-bottom:16px;font-weight:400}
+.foot ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.foot ul a{font-size:14.5px;color:var(--ink-2)}
+.foot ul a:hover{color:var(--gold-light)}
+.foot__bar{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+
+.prog{position:fixed;top:0;left:0;height:2px;z-index:90;width:0;
+  background:linear-gradient(90deg,var(--gold-deep),var(--gold-light))}
+
+.rv{opacity:0;transform:translateY(28px)}
+.no-motion .rv,.gsap-fail .rv{opacity:1;transform:none}
+.no-motion .mask>.ln,.gsap-fail .mask>.ln{transform:none}
+.no-motion .split__media img,.gsap-fail .split__media img{clip-path:inset(0)}
+
+@media (max-width:1080px){
+  :root{--gut:22px}
+  .nav ul{display:none}
+  .nav__r a.ul{display:none}
+  .nav__r{gap:12px}
+  .nav img{width:118px}
+  h1{font-size:clamp(42px,11vw,70px)}
+  .stats{grid-template-columns:1fr 1fr}
+  .stats div:nth-child(2n){border-right:0}
+  .sec-head{grid-template-columns:1fr;gap:24px}
+  .pinned__grid{grid-template-columns:1fr;gap:40px}
+  .pinned__stage{position:relative;top:auto;order:2;padding:0}
+  .pinned__copy{padding:64px 0}
+  .step{min-height:auto;padding:34px 0;opacity:1}
+  .phone{width:280px}
+  .screen{height:540px}
+  .split{grid-template-columns:1fr}
+  .split__media{min-height:340px}
+  .split__copy{border-left:0;border-top:1px solid var(--line);padding:52px 22px}
+  .mrow{grid-template-columns:56px 1fr;gap:18px}
+  .mrow p{grid-column:2}
+  .scard{grid-template-columns:1fr;position:relative;top:auto}
+  .scard__img{aspect-ratio:16/10}
+  .scard__body{padding:30px 24px}
+  .foot{grid-template-columns:1fr 1fr}
+  .pad{padding:74px 0}
+  .hero__scroll{display:none}
+  .stack{padding-bottom:0}
+}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none}
+  .mask>.ln{transform:none}
+  .split__media img{clip-path:inset(0)}
+}
+
+.pkg-band{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:104px 0}
+</style>
+</head>
+<body>
+
+
+<div class="intro" id="intro">
+  <img src="/brand/ptpn-lockup-520.png" alt="PTPN">
+  <div class="intro__bar" id="introBar"></div>
+</div>
+<div class="grain"></div>
+<div class="cur" id="cur"></div>
+<div class="cur-d" id="curD"></div>
+<div class="prog" id="prog"></div>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <img src="/brand/ptpn-lockup-520.png" alt="PTPN">
+    <ul>
+      <li><a class="ul" href="#packages">Personal training</a></li>
+      <li><a class="ul" href="#method">The method</a></li>
+      <li><a class="ul" href="#app">The app</a></li>
+      <li><a class="ul" href="#results">Results</a></li>
+    </ul>
+    <div class="nav__r">
+      <a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>      <a class="ul" href="/admin">Admin</a>
+      <a class="btn btn--sm magnetic" href="#contact">Enquire</a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero__media" id="heroMedia"><img id="heroImg" src="/images/hero-seated.jpg" alt="Pedro, personal trainer"></div>
+  <div class="wrap hero__in">
+    <h1>
+      <span class="mask"><span class="ln">Coaching that</span></span>
+      <span class="mask"><span class="ln">changes the</span></span>
+      <span class="mask"><span class="ln">numbers.</span></span>
+    </h1>
+    <p class="hero__sub rv">One-to-one personal training in Enfield. Programmed for you, measured every session, and coached by one person who knows your name.</p>
+    <div class="hero__cta rv">
+      <a class="btn magnetic" href="#contact">Book a free consultation</a>
+      <a class="btn btn--ghost magnetic" href="#packages">See the packages</a>
+    </div>
+  </div>
+  <span class="hero__scroll">Scroll</span>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<div class="press">
+  <div class="marquee" id="marquee">
+    <span>10,000+ sessions delivered</span><i>·</i><span>Coaching since 2016</span><i>·</i>
+    <span>Level 3 Personal Trainer</span><i>·</i><span>Sports Conditioning Coach</span><i>·</i>
+    <span>Bush Hill Park, Enfield</span><i>·</i>
+    <span>10,000+ sessions delivered</span><i>·</i><span>Coaching since 2016</span><i>·</i>
+    <span>Level 3 Personal Trainer</span><i>·</i><span>Sports Conditioning Coach</span><i>·</i>
+    <span>Bush Hill Park, Enfield</span><i>·</i>
+  </div>
+</div>
+
+<!-- ================= STATS ================= -->
+<div class="wrap">
+  <div class="stats">
+    <div class="rv"><b data-count="10" data-suffix="+">0</b><span>Years coaching</span></div>
+    <div class="rv"><b data-count="10000" data-suffix="+">0</b><span>Sessions delivered</span></div>
+    <div class="rv"><b>1:1</b><span>Never a group</span></div>
+    <div class="rv"><b>£0</b><span>App, included</span></div>
+  </div>
+</div>
+
+<!-- ================= INTRO ================= -->
+<section class="pad">
+  <div class="wrap sec-head">
+    <div>
+      <span class="eyebrow rv">The difference</span>
+      <h2 class="split-h" style="margin-top:22px">Most training fails for one reason.</h2>
+    </div>
+    <p class="lede rv">It was designed for someone else. Not for your knees, your shift pattern, your travel, or the fact that you have not trained seriously in four years. I build around what you can actually do — then we measure it.</p>
+  </div>
+</section>
+
+<!-- ================= PINNED APP ================= -->
+<section class="pinned" id="app">
+  <div class="wrap pinned__grid">
+    <div class="pinned__copy rail-line">
+      <span class="eyebrow rv">Your coaching, in your pocket</span>
+      <h2 class="split-h" style="margin-top:22px;margin-bottom:26px">Everything in one place.</h2>
+
+      <div class="step active" data-step="0">
+        <h3><i>01</i> Your programme</h3>
+        <p>Every session written out — sets, reps and loads. No standing in the gym wondering what comes next.</p>
+      </div>
+      <div class="step" data-step="1">
+        <h3><i>02</i> Log as you train</h3>
+        <p>Record each set as you go. I read it before your next session and adjust, so nothing stalls quietly.</p>
+      </div>
+      <div class="step" data-step="2">
+        <h3><i>03</i> Progress you can see</h3>
+        <p>Weight, body fat, loads and attendance, charted over time. If it is not working, you will know in weeks.</p>
+      </div>
+      <div class="step" data-step="3">
+        <h3><i>04</i> Nutrition and targets</h3>
+        <p>Macro targets and meal plans built around your goal — not a generic diet sheet you will abandon in a fortnight.</p>
+      </div>
+    </div>
+
+    <div class="pinned__stage">
+      <div class="phone" id="phone">
+        <div class="screen">
+          <div class="sface on" data-face="0">
+            <div class="sface__top"><span>This week</span><span class="chip"><i></i>On track</span></div>
+            <h4>Today's session</h4>
+            <div class="srows" style="margin-top:14px">
+              <div><span>Goblet squat</span><b>4 × 10</b></div>
+              <div><span>Romanian deadlift</span><b>3 × 8</b></div>
+              <div><span>Split squat</span><b>3 × 10</b></div>
+              <div><span>Sled push</span><b>4 × 20m</b></div>
+            </div>
+            <div class="smsg">Lower body today, written for your knees. Three working sets and one back-off.</div>
+            <div class="av"><i></i><span><b>Pedro</b><small>Your coach</small></span></div>
+          </div>
+          <div class="sface" data-face="1">
+            <div class="sface__top"><span>Session 12</span><span class="chip"><i></i>Logged</span></div>
+            <h4>Romanian deadlift</h4>
+            <div class="big">102.5 <small>kg</small></div>
+            <div class="srows" style="margin-top:18px">
+              <div><span>Set 1</span><b>100 × 8</b></div>
+              <div><span>Set 2</span><b>102.5 × 8</b></div>
+              <div><span>Set 3</span><b>102.5 × 6</b></div>
+            </div>
+            <div class="smsg">Nice work — you moved 102.5kg for a clean triple. Next week we push volume, not weight.</div>
+          </div>
+          <div class="sface" data-face="2">
+            <div class="sface__top"><span>Progress</span><span class="chip"><i></i>12 weeks</span></div>
+            <h4>Your numbers</h4>
+            <div class="big">−11.2 <small>kg</small></div>
+            <div class="sbars" style="margin-top:22px">
+              <div><div class="lbl"><span>Strength</span><span>+42.5 kg</span></div><div class="t"><i data-w="82"></i></div></div>
+              <div><div class="lbl"><span>Body composition</span><span>−6.4%</span></div><div class="t"><i data-w="64"></i></div></div>
+              <div><div class="lbl"><span>Consistency</span><span>96%</span></div><div class="t"><i data-w="96"></i></div></div>
+            </div>
+            <div class="srows" style="margin-top:22px">
+              <div><span>Sessions logged</span><b>58</b></div>
+              <div><span>Resting heart rate</span><b>−9 bpm</b></div>
+            </div>
+          </div>
+          <div class="sface" data-face="3">
+            <div class="sface__top"><span>Nutrition</span><span class="chip"><i></i>On target</span></div>
+            <h4>Today</h4>
+            <div class="big">142 <small>/ 180 g protein</small></div>
+            <div class="sbars" style="margin-top:22px">
+              <div><div class="lbl"><span>Protein</span><span>142 g</span></div><div class="t"><i data-w="79"></i></div></div>
+              <div><div class="lbl"><span>Calories</span><span>1,840</span></div><div class="t"><i data-w="71"></i></div></div>
+              <div><div class="lbl"><span>Steps</span><span>8,240</span></div><div class="t"><i data-w="83"></i></div></div>
+            </div>
+            <div class="srows" style="margin-top:22px">
+              <div><span>Breakfast</span><b>Logged</b></div>
+              <div><span>Lunch</span><b>Logged</b></div>
+              <div><span>Dinner</span><b>Planned</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COACH ================= -->
+<div class="split" id="coach">
+  <div class="split__media"><img id="coachImg" src="/images/coach-05-battle-ropes.jpg" alt="Pedro coaching"></div>
+  <div class="split__copy">
+    <span class="eyebrow rv">Your coach</span>
+    <h2 class="split-h" style="margin-top:20px">{coach.headline}</h2>
+    <p class="rv">An ex-basketball player, coaching since 2016 and in the industry for over ten years. More than 10,000 sessions and classes delivered, and a specialism in the people everyone else writes off — bad knees, bad backs, and a long time away from it.</p>
+    <p class="rv">You get a training plan, nutrition targets and goal setting. My attention to detail and your commitment are the ingredients — and I coach you every step of the way.</p>
+    <a class="btn btn--ghost magnetic rv" href="#contact">Read my story</a>
+  </div>
+</div>
+
+<!-- ================= METHOD ================= -->
+<section class="pad" id="method">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow rv">The method</span>
+        <h2 class="split-h" style="margin-top:22px">Four steps, then it is just habit.</h2>
+      </div>
+      <p class="lede rv">No contracts, no joining fee, no pressure. We start with a conversation and build from what you can do today.</p>
+    </div>
+    <div class="method">
+      <div class="mrow rv"><span class="mn">01</span><h3>Free consultation</h3><p>We talk through your goal, your history and what has stopped you before. No charge, no obligation, and an honest answer about whether I can help.</p></div>
+      <div class="mrow rv"><span class="mn">02</span><h3>Assessment</h3><p>Your first session is a proper assessment. Strength, movement, and a baseline we can measure against. The programme is written from that, not from a template.</p></div>
+      <div class="mrow rv"><span class="mn">03</span><h3>Train and log</h3><p>We train, you log it in the app. Every set, every load, every session. I see it before you walk in next time.</p></div>
+      <div class="mrow rv"><span class="mn">04</span><h3>Review and adjust</h3><p>We look at the numbers together and change the plan when the plan needs changing — not on a fixed schedule, but when the data says so.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATEMENT ================= -->
+<section class="statement">
+  <div class="statement__bg" id="stmtBg"><img src="/images/hero-plate2.jpg" alt=""></div>
+  <div class="wrap statement__in">
+    <h2 class="split-h">Progress you can see, not guess at.</h2>
+    <p class="rv">Weight, body fat, the loads you move and how often you turn up. If something is not working, the numbers say so before you have wasted three months.</p>
+  </div>
+</section>
+
+<!-- ================= RESULTS: sticky stack ================= -->
+<section class="pad" id="results">
+  <div class="wrap" style="margin-bottom:56px">
+    <span class="eyebrow rv">Clients</span>
+    <h2 class="split-h" style="margin-top:22px;max-width:20ch">Real people. Real numbers.</h2>
+  </div>
+  <div class="wrap stack">
+    <article class="scard rv" style="--i:0">
+      <div class="scard__img"><img src="/images/hero-seated.jpg" alt=""></div>
+      <div class="scard__body">
+        <b>“My first ever workout, at 55.”</b>
+        <p>Pedro has improved my strength and fitness, pushing me harder over time, within my limits. For me it was my first ever time working out, at the age of 55 with dodgy knees.</p>
+        <span>Neil Purcell · Google review</span>
+      </div>
+    </article>
+    <article class="scard rv" style="--i:1">
+      <div class="scard__img"><img src="/images/coach-04-kettlebell-squat.jpg" alt=""></div>
+      <div class="scard__body">
+        <b>“Exercises I never imagined.”</b>
+        <p>After three months I was able to perform exercises I never imagined I could. I gained 5kg of muscle mass and feel more energetic and active than ever.</p>
+        <span>Iuri da Costa · client</span>
+      </div>
+    </article>
+    <article class="scard rv" style="--i:2">
+      <div class="scard__img"><img src="/images/coach-05-battle-ropes.jpg" alt=""></div>
+      <div class="scard__body">
+        <b>“Knowledgeable and supportive.”</b>
+        <p>The trainers are incredibly knowledgeable and supportive, always pushing me to reach my goals while ensuring I stay safe and motivated.</p>
+        <span>Fateh Singh · Google review</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="cta">
+  <div class="wrap">
+    <span class="eyebrow rv">Get started</span>
+    <h2 class="split-h" style="margin-top:22px">Book a free consultation.</h2>
+    <p class="lede rv">No charge, no obligation, no pressure. Tell me what you want to change and I will tell you honestly whether I can help.</p>
+    <a class="btn magnetic rv" href="#contact">Book a free consultation</a>
+  </div>
+</section>
+
+<div class="pkg-band"><div class="wrap"><Packages /></div></div>
+<section class="pad" style="border-top:1px solid var(--line)"><div class="wrap"><Testimonials /></div></section>
+<section class="band"><div class="wrap"><Faq /></div></section>
+<EnquiryForm />
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <img src="/brand/ptpn-lockup-520.png" alt="PTPN">
+        <p>One-to-one personal training in Bush Hill Park, Enfield. Programmed for you, measured every session.</p>
+      </div>
+      <div><h5>Coaching</h5><ul><li><a class="ul" href="#packages">Personal training</a></li><li><a class="ul" href="#method">The method</a></li><li><a class="ul" href="#packages">Packages</a></li><li><a class="ul" href="#packages">Duo</a></li></ul></div>
+      <div><h5>More</h5><ul><li><a class="ul" href="#coach">Your coach</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">The app</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>      <a class="ul" href="/admin">Admin</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href="#contact">Book a consultation</a></li></ul></div>
+    </div>
+    <div class="foot__bar"><span>© 2026 PTPN</span><span>Bush Hill Park, Enfield, London</span></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var doc = document.documentElement;
+
+  function staticFallback(){
+    doc.classList.add('gsap-fail');
+    document.querySelectorAll('.mask > .ln').forEach(function(s){ s.style.transform='none'; });
+    document.querySelectorAll('.rv').forEach(function(s){ s.style.opacity=1; s.style.transform='none'; });
+    document.querySelectorAll('.sbars .t i').forEach(function(b){ b.style.width=b.dataset.w+'%'; });
+    document.querySelectorAll('[data-count]').forEach(function(n){
+      n.textContent = parseFloat(n.dataset.count).toLocaleString('en-GB') + (n.dataset.suffix||'');
+    });
+    document.querySelectorAll('.split__media img').forEach(function(i){ i.style.clipPath='inset(0)'; });
+    var i0 = document.getElementById('intro'); if (i0) i0.style.display='none';
+    document.body.classList.remove('locked');
+  }
+  if (!window.gsap || !window.ScrollTrigger) { staticFallback(); return; }
+  if (reduce) doc.classList.add('no-motion');
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- smooth scroll ---------- */
+  var lenis = null;
+  if (window.Lenis && !reduce) {
+    lenis = new Lenis({ duration:1.05, smoothWheel:true, lerp:0.09 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function(t){ lenis.raf(t*1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  /* ---------- split headings into lines, each masked ---------- */
+  function splitLines(el){
+    var words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = words.map(function(w){ return '<span class="w">'+w+'</span>'; }).join(' ');
+    var ws = [].slice.call(el.querySelectorAll('.w'));
+    var lines = [], top = null, cur = null;
+    ws.forEach(function(s){
+      if (top === null || Math.abs(s.offsetTop - top) > 2) { cur = []; lines.push(cur); top = s.offsetTop; }
+      cur.push(s.textContent);
+    });
+    el.innerHTML = lines.map(function(L){
+      return '<span class="mask"><span class="ln">'+L.join(' ')+'</span></span>';
+    }).join('');
+  }
+  document.querySelectorAll('.split-h').forEach(splitLines);
+
+  /* ---------- custom cursor ---------- */
+  var cur = document.getElementById('cur'), curD = document.getElementById('curD');
+  if (cur && window.matchMedia('(hover:hover)').matches && !reduce) {
+    var mx=0,my=0,dx=0,dy=0;
+    window.addEventListener('mousemove', function(e){
+      mx=e.clientX; my=e.clientY;
+      gsap.set(cur,{x:mx,y:my}); cur.style.opacity=1; curD.style.opacity=1;
+    });
+    gsap.ticker.add(function(){
+      dx += (mx-dx)*0.16; dy += (my-dy)*0.16;
+      gsap.set(curD,{x:dx,y:dy});
+    });
+    document.querySelectorAll('a,button,.btn').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ curD.classList.add('grow'); });
+      el.addEventListener('mouseleave', function(){ curD.classList.remove('grow'); });
+    });
+  }
+
+  /* ---------- magnetic buttons ---------- */
+  if (!reduce) {
+    document.querySelectorAll('.magnetic').forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left - r.width/2) * 0.28;
+        var y = (e.clientY - r.top - r.height/2) * 0.4;
+        gsap.to(el, { x:x, y:y, duration:0.5, ease:'power3.out' });
+      });
+      el.addEventListener('mouseleave', function(){
+        gsap.to(el, { x:0, y:0, duration:0.7, ease:'elastic.out(1,0.4)' });
+      });
+    });
+  }
+
+  /* ---------- intro curtain ---------- */
+  var intro = document.getElementById('intro');
+  document.body.classList.add('locked');
+  if (reduce) {
+    intro.style.display='none'; document.body.classList.remove('locked');
+  } else {
+    var tl = gsap.timeline({ onComplete:function(){ document.body.classList.remove('locked'); ScrollTrigger.refresh(); } });
+    tl.to('.intro img', { opacity:1, y:0, duration:0.7, ease:'power3.out' })
+      .to('#introBar', { width:'100%', duration:0.9, ease:'power2.inOut' }, '-=0.3')
+      .to('.intro img', { opacity:0, duration:0.3 })
+      .to(intro, { yPercent:-100, duration:0.9, ease:'expo.inOut' })
+      .set(intro, { display:'none' });
+  }
+
+  /* ---------- hero: line masks + entrance ---------- */
+  gsap.to('.hero h1 .mask > .ln', { y:0, duration:1.3, ease:'expo.out', stagger:0.09, delay:1.5 });
+  gsap.from('.hero__sub, .hero__cta', { opacity:0, y:26, duration:1, ease:'power3.out', stagger:0.12, delay:1.95 });
+
+  /* ---------- hero scroll: image drifts, copy lifts ---------- */
+  gsap.to('#heroImg', { yPercent:12, scale:1.14, ease:'none',
+    scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true } });
+  gsap.to('.hero__in', { yPercent:-16, opacity:0.15, ease:'none',
+    scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true } });
+
+  /* ---------- progress bar ---------- */
+  gsap.to('#prog', { width:'100%', ease:'none',
+    scrollTrigger:{ trigger:document.body, start:'top top', end:'bottom bottom', scrub:0.3 } });
+
+  /* ---------- nav ---------- */
+  ScrollTrigger.create({ start:'top -80', end:99999,
+    onUpdate:function(self){ document.getElementById('hdr').classList.toggle('solid', self.scroll() > 80); } });
+
+  /* ---------- marquee, scroll-velocity reactive ---------- */
+  var mq = gsap.to('#marquee', { xPercent:-50, duration:32, ease:'none', repeat:-1 });
+  ScrollTrigger.create({ onUpdate:function(self){
+    var v = self.getVelocity();
+    mq.timeScale(gsap.utils.clamp(0.4, 5, 1 + Math.abs(v)/1600));
+    gsap.to(mq, { timeScale:1, duration:0.6, overwrite:true, delay:0.12 });
+  }});
+
+  /* ---------- reveals ---------- */
+  gsap.utils.toArray('.rv').forEach(function(el){
+    gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:1, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 88%', once:true } });
+  });
+  gsap.utils.toArray('.split-h').forEach(function(h){
+    gsap.to(h.querySelectorAll('.mask > .ln'), { y:0, duration:1.15, ease:'expo.out', stagger:0.08,
+      scrollTrigger:{ trigger:h, start:'top 86%', once:true } });
+  });
+
+  /* ---------- count-ups ---------- */
+  gsap.utils.toArray('[data-count]').forEach(function(el){
+    var target = parseFloat(el.dataset.count), sfx = el.dataset.suffix||'', o = {v:0};
+    gsap.to(o, { v:target, duration:1.7, ease:'power2.out',
+      scrollTrigger:{ trigger:el, start:'top 88%', once:true },
+      onUpdate:function(){ el.textContent = Math.round(o.v).toLocaleString('en-GB') + sfx; } });
+  });
+
+  /* ---------- PINNED APP: CSS sticky does the pinning, ScrollTrigger just reports ---------- */
+  var steps = gsap.utils.toArray('.step'), faces = gsap.utils.toArray('.sface');
+  function activate(i){
+    steps.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    faces.forEach(function(f,k){ f.classList.toggle('on', k===i); });
+    var f = faces[i];
+    if (f) f.querySelectorAll('.t i').forEach(function(b){ b.style.width = b.dataset.w + '%'; });
+  }
+  activate(0);
+  ScrollTrigger.create({
+    trigger:'#pinned', start:'top center', end:'bottom center',
+    onUpdate:function(self){
+      var i = Math.min(steps.length-1, Math.floor(self.progress * steps.length));
+      activate(i);
+      gsap.to('#phone', { y: -8 + self.progress*16, duration:0.6, ease:'power2.out', overwrite:'auto' });
+    }
+  });
+
+  /* ---------- clip-path image reveal + parallax ---------- */
+  gsap.to('#coachImg', { clipPath:'inset(0% 0% 0% 0%)', duration:1.4, ease:'expo.inOut',
+    scrollTrigger:{ trigger:'.split', start:'top 78%', once:true } });
+  gsap.fromTo('#coachImg', { yPercent:-6 }, { yPercent:6, ease:'none',
+    scrollTrigger:{ trigger:'.split', start:'top bottom', end:'bottom top', scrub:true } });
+  gsap.fromTo('#stmtBg img', { yPercent:-8 }, { yPercent:8, ease:'none',
+    scrollTrigger:{ trigger:'.statement', start:'top bottom', end:'bottom top', scrub:true } });
+
+  /* ---------- sticky stack: cards scale slightly as the next covers them ---------- */
+  gsap.utils.toArray('.scard').forEach(function(card, i){
+    gsap.to(card, { scale:1 - (0.03 * (gsap.utils.toArray('.scard').length - 1 - i)), opacity:1, ease:'none',
+      scrollTrigger:{ trigger:card, start:'top 18%', end:'bottom 22%', scrub:true } });
+  });
+
+  window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+  window.addEventListener('resize', function(){ ScrollTrigger.refresh(); });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var doc = document.documentElement;
+
+  function staticFallback(){
+    doc.classList.add('gsap-fail');
+    document.querySelectorAll('.mask > .ln').forEach(function(s){ s.style.transform='none'; });
+    document.querySelectorAll('.rv').forEach(function(s){ s.style.opacity=1; s.style.transform='none'; });
+    document.querySelectorAll('.sbars .t i').forEach(function(b){ b.style.width=b.dataset.w+'%'; });
+    document.querySelectorAll('[data-count]').forEach(function(n){
+      n.textContent = parseFloat(n.dataset.count).toLocaleString('en-GB') + (n.dataset.suffix||'');
+    });
+    document.querySelectorAll('.split__media img').forEach(function(i){ i.style.clipPath='inset(0)'; });
+    var i0 = document.getElementById('intro'); if (i0) i0.style.display='none';
+    document.body.classList.remove('locked');
+  }
+  if (!window.gsap || !window.ScrollTrigger) { staticFallback(); return; }
+  if (reduce) doc.classList.add('no-motion');
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- smooth scroll ---------- */
+  var lenis = null;
+  if (window.Lenis && !reduce) {
+    lenis = new Lenis({ duration:1.05, smoothWheel:true, lerp:0.09 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function(t){ lenis.raf(t*1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  /* ---------- split headings into lines, each masked ---------- */
+  function splitLines(el){
+    var words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = words.map(function(w){ return '<span class="w">'+w+'</span>'; }).join(' ');
+    var ws = [].slice.call(el.querySelectorAll('.w'));
+    var lines = [], top = null, cur = null;
+    ws.forEach(function(s){
+      if (top === null || Math.abs(s.offsetTop - top) > 2) { cur = []; lines.push(cur); top = s.offsetTop; }
+      cur.push(s.textContent);
+    });
+    el.innerHTML = lines.map(function(L){
+      return '<span class="mask"><span class="ln">'+L.join(' ')+'</span></span>';
+    }).join('');
+  }
+  document.querySelectorAll('.split-h').forEach(splitLines);
+
+  /* ---------- custom cursor ---------- */
+  var cur = document.getElementById('cur'), curD = document.getElementById('curD');
+  if (cur && window.matchMedia('(hover:hover)').matches && !reduce) {
+    var mx=0,my=0,dx=0,dy=0;
+    window.addEventListener('mousemove', function(e){
+      mx=e.clientX; my=e.clientY;
+      gsap.set(cur,{x:mx,y:my}); cur.style.opacity=1; curD.style.opacity=1;
+    });
+    gsap.ticker.add(function(){
+      dx += (mx-dx)*0.16; dy += (my-dy)*0.16;
+      gsap.set(curD,{x:dx,y:dy});
+    });
+    document.querySelectorAll('a,button,.btn').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ curD.classList.add('grow'); });
+      el.addEventListener('mouseleave', function(){ curD.classList.remove('grow'); });
+    });
+  }
+
+  /* ---------- magnetic buttons ---------- */
+  if (!reduce) {
+    document.querySelectorAll('.magnetic').forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left - r.width/2) * 0.28;
+        var y = (e.clientY - r.top - r.height/2) * 0.4;
+        gsap.to(el, { x:x, y:y, duration:0.5, ease:'power3.out' });
+      });
+      el.addEventListener('mouseleave', function(){
+        gsap.to(el, { x:0, y:0, duration:0.7, ease:'elastic.out(1,0.4)' });
+      });
+    });
+  }
+
+  /* ---------- intro curtain ---------- */
+  var intro = document.getElementById('intro');
+  document.body.classList.add('locked');
+  if (reduce) {
+    intro.style.display='none'; document.body.classList.remove('locked');
+  } else {
+    var tl = gsap.timeline({ onComplete:function(){ document.body.classList.remove('locked'); ScrollTrigger.refresh(); } });
+    tl.to('.intro img', { opacity:1, y:0, duration:0.7, ease:'power3.out' })
+      .to('#introBar', { width:'100%', duration:0.9, ease:'power2.inOut' }, '-=0.3')
+      .to('.intro img', { opacity:0, duration:0.3 })
+      .to(intro, { yPercent:-100, duration:0.9, ease:'expo.inOut' })
+      .set(intro, { display:'none' });
+  }
+
+  /* ---------- hero: line masks + entrance ---------- */
+  gsap.to('.hero h1 .mask > .ln', { y:0, duration:1.3, ease:'expo.out', stagger:0.09, delay:1.5 });
+  gsap.from('.hero__sub, .hero__cta', { opacity:0, y:26, duration:1, ease:'power3.out', stagger:0.12, delay:1.95 });
+
+  /* ---------- hero scroll: image drifts, copy lifts ---------- */
+  gsap.to('#heroImg', { yPercent:12, scale:1.14, ease:'none',
+    scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true } });
+  gsap.to('.hero__in', { yPercent:-16, opacity:0.15, ease:'none',
+    scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true } });
+
+  /* ---------- progress bar ---------- */
+  gsap.to('#prog', { width:'100%', ease:'none',
+    scrollTrigger:{ trigger:document.body, start:'top top', end:'bottom bottom', scrub:0.3 } });
+
+  /* ---------- nav ---------- */
+  ScrollTrigger.create({ start:'top -80', end:99999,
+    onUpdate:function(self){ document.getElementById('hdr').classList.toggle('solid', self.scroll() > 80); } });
+
+  /* ---------- marquee, scroll-velocity reactive ---------- */
+  var mq = gsap.to('#marquee', { xPercent:-50, duration:32, ease:'none', repeat:-1 });
+  ScrollTrigger.create({ onUpdate:function(self){
+    var v = self.getVelocity();
+    mq.timeScale(gsap.utils.clamp(0.4, 5, 1 + Math.abs(v)/1600));
+    gsap.to(mq, { timeScale:1, duration:0.6, overwrite:true, delay:0.12 });
+  }});
+
+  /* ---------- reveals ---------- */
+  gsap.utils.toArray('.rv').forEach(function(el){
+    gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:1, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 88%', once:true } });
+  });
+  gsap.utils.toArray('.split-h').forEach(function(h){
+    gsap.to(h.querySelectorAll('.mask > .ln'), { y:0, duration:1.15, ease:'expo.out', stagger:0.08,
+      scrollTrigger:{ trigger:h, start:'top 86%', once:true } });
+  });
+
+  /* ---------- count-ups ---------- */
+  gsap.utils.toArray('[data-count]').forEach(function(el){
+    var target = parseFloat(el.dataset.count), sfx = el.dataset.suffix||'', o = {v:0};
+    gsap.to(o, { v:target, duration:1.7, ease:'power2.out',
+      scrollTrigger:{ trigger:el, start:'top 88%', once:true },
+      onUpdate:function(){ el.textContent = Math.round(o.v).toLocaleString('en-GB') + sfx; } });
+  });
+
+  /* ---------- PINNED APP: CSS sticky does the pinning, ScrollTrigger just reports ---------- */
+  var steps = gsap.utils.toArray('.step'), faces = gsap.utils.toArray('.sface');
+  function activate(i){
+    steps.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    faces.forEach(function(f,k){ f.classList.toggle('on', k===i); });
+    var f = faces[i];
+    if (f) f.querySelectorAll('.t i').forEach(function(b){ b.style.width = b.dataset.w + '%'; });
+  }
+  activate(0);
+  ScrollTrigger.create({
+    trigger:'#pinned', start:'top center', end:'bottom center',
+    onUpdate:function(self){
+      var i = Math.min(steps.length-1, Math.floor(self.progress * steps.length));
+      activate(i);
+      gsap.to('#phone', { y: -8 + self.progress*16, duration:0.6, ease:'power2.out', overwrite:'auto' });
+    }
+  });
+
+  /* ---------- clip-path image reveal + parallax ---------- */
+  gsap.to('#coachImg', { clipPath:'inset(0% 0% 0% 0%)', duration:1.4, ease:'expo.inOut',
+    scrollTrigger:{ trigger:'.split', start:'top 78%', once:true } });
+  gsap.fromTo('#coachImg', { yPercent:-6 }, { yPercent:6, ease:'none',
+    scrollTrigger:{ trigger:'.split', start:'top bottom', end:'bottom top', scrub:true } });
+  gsap.fromTo('#stmtBg img', { yPercent:-8 }, { yPercent:8, ease:'none',
+    scrollTrigger:{ trigger:'.statement', start:'top bottom', end:'bottom top', scrub:true } });
+
+  /* ---------- sticky stack: cards scale slightly as the next covers them ---------- */
+  gsap.utils.toArray('.scard').forEach(function(card, i){
+    gsap.to(card, { scale:1 - (0.03 * (gsap.utils.toArray('.scard').length - 1 - i)), opacity:1, ease:'none',
+      scrollTrigger:{ trigger:card, start:'top 18%', end:'bottom 22%', scrub:true } });
+  });
+
+  window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+  window.addEventListener('resize', function(){ ScrollTrigger.refresh(); });
+})();
+</script>
+</body>
+</html>

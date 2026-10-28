@@ -1,0 +1,113 @@
+---
+import '../styles/global.css';
+// self-hosted webfonts: no third-party request, no layout shift, better Core Web Vitals
+import '@fontsource/archivo/400.css';
+import '@fontsource/archivo/600.css';
+import '@fontsource/archivo/700.css';
+import '@fontsource/archivo/800.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site, coach } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  /** extra JSON-LD blocks for this page */
+  schema?: Record<string, unknown>[];
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  image = '/images/coach-02-portrait-wide.jpg',
+  schema = [],
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+
+// Entity definition for search and answer engines.
+const baseSchema: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${site.url}/#pedro`,
+    name: 'Pedro',
+    jobTitle: 'Personal Trainer',
+    description: coach.intro,
+    email: site.email,
+    hasCredential: coach.qualifications.map((q) => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: q,
+    })),
+    knowsAbout: coach.specialisms,
+    worksFor: { '@id': `${site.url}/#business` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HealthAndBeautyBusiness',
+    '@id': `${site.url}/#business`,
+    name: 'PTPN Personal Training',
+    alternateName: 'PTPN Be fit',
+    url: site.url,
+    email: site.email,
+    description: site.description,
+    image: ogImage,
+    logo: new URL('/brand/ptpn-lockup.png', Astro.site).href,
+    priceRange: '££',
+    currenciesAccepted: 'GBP',
+    areaServed: {
+      '@type': 'Place',
+      name: 'Bush Hill Park, Enfield, London',
+    },
+    employee: { '@id': `${site.url}/#pedro` },
+    slogan: 'Be fit',
+  },
+];
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" href="/brand/ptpn-favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/brand/ptpn-lockup-520.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PTPN" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="theme-color" content="#111112" />
+
+    {[...baseSchema, ...schema].map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

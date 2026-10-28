@@ -1,0 +1,316 @@
+---
+import { packages, duo, packageRows } from '../data/site';
+
+const gbp = (n: number) => (Number.isInteger(n) ? `£${n}` : `£${n.toFixed(2)}`);
+const order = ['Express', 'Ignition', 'Signature', 'Momentum'];
+const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+---
+
+<section class="pkg band" id="packages">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Packages</span>
+      <h2>Every package, side by side.</h2>
+      <p class="lede">All prices are per session and paid in person. No contract, no joining fee, no direct debit.</p>
+    </div>
+
+    <!-- desktop / tablet: comparison table -->
+    <div class="pkg__table-wrap">
+      <table>
+        <caption class="visually-hidden">PTPN personal training packages compared</caption>
+        <thead>
+          <tr>
+            <th scope="col">Package</th>
+            {cols.map((p) => (
+              <th scope="col" class={p.best ? 'is-best' : undefined}>
+                <span class="pkg__name">{p.name}</span>
+                <span class="pkg__len">{p.sessions} × {p.minutes} min</span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Price per session</th>
+            {cols.map((p) => (
+              <td class={p.best ? 'is-best' : undefined}>
+                {p.best && <span class="pkg__badge">Best value</span>}
+                <span class="pkg__price">{gbp(p.perSession)}</span>
+                <span class="pkg__total">{gbp(p.total)} total</span>
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <th scope="row">Session length</th>
+            {cols.map((p) => <td class={p.best ? 'is-best' : undefined}>{p.minutes} minutes</td>)}
+          </tr>
+          {packageRows.map((row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              {cols.map((p) => (
+                <td class={`is-yes${p.best ? ' is-best' : ''}`}>
+                  {'value' in row ? row.value : `${p.minutes} min sessions`}
+                </td>
+              ))}
+            </tr>
+          ))}
+          <tr>
+            <th scope="row">Good if you</th>
+            {cols.map((p) => <td class={p.best ? 'is-best' : undefined}>{p.goodIfYou}</td>)}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- phone: stacked cards, because a pricing table should never scroll sideways -->
+    <div class="pkg__cards">
+      {order.map((name) => {
+        const p = packages.find((x) => x.name === name)!;
+        return (
+          <article class={`pkg__card${p.best ? ' is-best' : ''}`}>
+            <h3 class="pkg__card-name">{p.name}</h3>
+            <p class="pkg__card-len">{p.tagline}</p>
+            <p class="pkg__card-price">{gbp(p.perSession)} <small>/ session</small></p>
+            <p class="pkg__card-total">{gbp(p.total)} total</p>
+            <ul>
+              {p.includes.map((i) => <li>{i}</li>)}
+            </ul>
+            <a class={`btn ${p.best ? 'btn--primary' : 'btn--ghost'} btn--block`} href="#contact">Free consultation</a>
+          </article>
+        );
+      })}
+    </div>
+
+    <div class="pkg__duo">
+      <div>
+        <h3>{duo.name}</h3>
+        <p>{duo.detail}</p>
+      </div>
+      <p class="pkg__duo-price">{gbp(duo.price)} <small>/ {duo.period}</small></p>
+      <a class="btn btn--ghost" href="#contact">Free consultation</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pkg__table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius);
+    background: var(--card);
+  }
+
+  .pkg table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 820px;
+  }
+
+  .pkg th,
+  .pkg td {
+    padding: 17px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: bottom;
+  }
+
+  .pkg thead th {
+    background: #141415;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .pkg thead th.is-best { background: #1d1b16; }
+
+  .pkg__name {
+    display: block;
+    font-family: var(--display);
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    text-transform: none;
+    color: var(--gold-light);
+    margin-bottom: 5px;
+  }
+
+  .pkg__len {
+    display: block;
+    font-size: 10px;
+    letter-spacing: .08em;
+  }
+
+  .pkg tbody th {
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    vertical-align: middle;
+  }
+
+  .pkg tbody td {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: #cdc8bf;
+    vertical-align: middle;
+  }
+
+  .pkg tbody tr:last-child th,
+  .pkg tbody tr:last-child td { border-bottom: 0; }
+
+  .pkg td.is-best { background: #1a1915; }
+  .pkg td.is-yes { color: var(--gold); }
+
+  .pkg__price {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold-light);
+    display: block;
+    letter-spacing: -.02em;
+  }
+
+  .pkg__total {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--muted);
+  }
+
+  .pkg__badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #141414;
+    font-family: var(--display);
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+
+  /* phone cards */
+  .pkg__cards { display: none; }
+
+  .pkg__card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 26px 22px;
+  }
+
+  .pkg__card.is-best {
+    border-color: var(--gold-deep);
+    background: linear-gradient(180deg, #1f1d18, #1b1b1c);
+  }
+
+  .pkg__card-name {
+    font-size: 21px;
+    color: var(--gold-light);
+  }
+
+  .pkg__card.is-best .pkg__card-name { color: var(--gold); }
+
+  .pkg__card-len {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .pkg__card-price {
+    font-family: var(--mono);
+    font-size: 30px;
+    color: var(--gold);
+    margin: 12px 0 2px;
+    letter-spacing: -.02em;
+  }
+
+  .pkg__card-price small { font-size: 12px; color: var(--muted); }
+
+  .pkg__card-total {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 16px;
+  }
+
+  .pkg__card ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 9px;
+    margin-bottom: 20px;
+  }
+
+  .pkg__card li {
+    font-size: 14.5px;
+    color: #cdc8bf;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .pkg__card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--gold-deep);
+    transform: rotate(45deg);
+  }
+
+  /* Duo */
+  .pkg__duo {
+    margin-top: 22px;
+    border: 1px dashed #3a3529;
+    background: #141414;
+    border-radius: var(--radius);
+    padding: 28px 34px;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .pkg__duo h3 {
+    font-size: 24px;
+    color: var(--gold-light);
+  }
+
+  .pkg__duo p {
+    color: var(--muted);
+    font-size: 15.5px;
+    margin-top: 6px;
+    max-width: 52ch;
+  }
+
+  .pkg__duo-price {
+    font-family: var(--mono);
+    font-size: 28px;
+    color: var(--gold);
+    margin-left: auto !important;
+    margin-top: 0 !important;
+  }
+
+  .pkg__duo-price small { font-size: 13px; color: var(--muted); }
+
+  @media (max-width: 880px) {
+    .pkg__table-wrap { display: none; }
+    .pkg__cards { display: grid; gap: 14px; }
+  }
+
+  @media (max-width: 640px) {
+    .pkg__duo { padding: 24px 22px; gap: 18px; }
+    .pkg__duo-price { margin-left: 0 !important; }
+  }
+</style>

@@ -1,0 +1,137 @@
+---
+// The progress chart, extracted from the hero.
+// It lives in the "what gets measured" section, where it explains the method
+// rather than posing as a result. Figures are illustrative and labelled as such.
+---
+
+<figure class="panel">
+  <figcaption class="panel__top">
+    <span class="panel__title">Client progress</span>
+    <span class="panel__sub">20-week coaching block</span>
+  </figcaption>
+
+  <div class="panel__legend">
+    <span><i style="background:var(--gold)"></i> Weight kg</span>
+    <span><i style="background:#6f8f7a"></i> Body fat %</span>
+  </div>
+
+  <svg class="panel__chart" viewBox="0 0 520 300" role="img"
+       aria-label="Illustrative chart: weight and body fat both trending down over a twenty week coaching block">
+    <g stroke="#26262a" stroke-width="1">
+      <line x1="34" y1="45" x2="505" y2="45" /><line x1="34" y1="95" x2="505" y2="95" />
+      <line x1="34" y1="145" x2="505" y2="145" /><line x1="34" y1="175" x2="505" y2="175" />
+      <line x1="34" y1="215" x2="505" y2="215" /><line x1="34" y1="255" x2="505" y2="255" />
+    </g>
+    <g font-family="IBM Plex Mono, monospace" font-size="9" fill="#6d6a63">
+      <text x="4" y="48">92</text><text x="4" y="98">89</text><text x="4" y="148">81</text>
+      <text x="4" y="178">31</text><text x="4" y="218">27</text><text x="4" y="258">22</text>
+      <text x="40" y="272">wk 1</text><text x="240" y="272">wk 10</text><text x="452" y="272">wk 20</text>
+    </g>
+    <polyline fill="none" stroke="#6f8f7a" stroke-width="2" stroke-linejoin="round"
+      points="40,175 64.2,178.5 88.4,182.9 112.6,186.4 136.8,190.8 161,195.2 185.2,198.7 209.4,202.3 233.6,206.6 257.8,211.9 282,215.4 306.2,220.7 330.4,226 354.6,229.5 378.8,234.8 403,239.2 427.2,242.7 451.4,247.1 475.6,251.5 499.8,255" />
+    <polyline fill="none" stroke="#d7b978" stroke-width="2.5" stroke-linejoin="round"
+      points="40,45 64.2,50.4 88.4,56.6 112.6,61.1 136.8,67.3 161,72.7 185.2,77.1 209.4,80.7 233.6,85.2 257.8,91.4 282,95 306.2,101.2 330.4,107.5 354.6,112 378.8,118.2 403,123.6 427.2,128 451.4,134.3 475.6,139.7 499.8,145" />
+    <circle cx="499.8" cy="145" r="4" fill="#d7b978" />
+    <circle cx="499.8" cy="255" r="4" fill="#6f8f7a" />
+  </svg>
+
+  <div class="panel__tiles">
+    <div><b>−11.2</b><span>kg</span><em>20 weeks</em></div>
+    <div><b>−9.1</b><span>% body fat</span><em>20 weeks</em></div>
+    <div><b>+38</b><span>kg squat</span><em>personal best</em></div>
+  </div>
+
+  <p class="panel__note">Illustrative figures showing the metrics we track, not a client's results.</p>
+</figure>
+
+<style>
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius);
+    padding: 26px;
+    margin: 0;
+  }
+
+  .panel__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .panel__title { font-family: var(--display); font-size: 15px; font-weight: 700; }
+
+  .panel__sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .panel__legend { display: flex; gap: 18px; margin-bottom: 8px; }
+
+  .panel__legend span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .panel__legend i { width: 14px; height: 3px; border-radius: 2px; display: block; }
+
+  .panel__chart { width: 100%; height: auto; }
+
+  .panel__tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+
+  .panel__tiles div {
+    background: #141415;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 13px;
+  }
+
+  .panel__tiles b {
+    font-family: var(--mono);
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--gold-light);
+    display: block;
+    letter-spacing: -.02em;
+  }
+
+  .panel__tiles span {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .panel__tiles em {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: #6f8f7a;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .panel__note {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .04em;
+    color: var(--faint);
+  }
+
+  @media (max-width: 520px) {
+    .panel__tiles { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,127 @@
+---
+import { site } from '../data/site';
+---
+
+<div class="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <span class="eyebrow">Personal training · {site.areaShort}</span>
+      <h1>Coaching that <em>changes the numbers.</em></h1>
+      <p class="lede">
+        One-to-one personal training, programmed for you and measured every single session. Your plan,
+        your progress and your coach, in an app that comes with the coaching.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#contact">Book a free consultation</a>
+        <a class="btn btn--ghost" href="/personal-training">See the packages</a>
+      </div>
+      <dl class="hero__facts">
+        <div><dt>£32.50</dt><dd>from, per session</dd></div>
+        <div><dt>60 min</dt><dd>full sessions</dd></div>
+        <div><dt>£0</dt><dd>app included</dd></div>
+      </dl>
+    </div>
+
+    <figure class="hero__figure">
+      <picture>
+        <source srcset="/images/hero-deadlift.webp" type="image/webp" />
+        <img src="/images/hero-deadlift.jpg"
+             alt="Pedro, personal trainer, performing a kettlebell deadlift in the gym"
+             width="810" height="1014" fetchpriority="high" />
+      </picture>
+      <figcaption>Pedro · kettlebell deadlift</figcaption>
+    </figure>
+  </div>
+</div>
+
+<style>
+  .hero { border-bottom: 1px solid #1f1f21; }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 60px;
+    align-items: center;
+    padding-block: 76px 84px;
+  }
+
+  .hero__copy { display: flex; flex-direction: column; }
+
+  .hero h1 { margin-top: 26px; }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero__copy .lede { margin-top: 26px; }
+
+  .hero__cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 38px;
+  }
+
+  .hero__facts {
+    margin-top: 30px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .hero__facts div {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: .04em;
+    color: var(--muted);
+  }
+
+  .hero__facts dt { display: inline; color: var(--gold); margin-right: .45em; }
+  .hero__facts dd { display: inline; margin: 0; }
+
+  .hero__figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .hero__figure img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 62% center;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+  }
+
+  .hero__figure figcaption {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  @media (max-width: 1060px) {
+    .hero__grid {
+      grid-template-columns: 1fr;
+      gap: 44px;
+      padding-block: 52px 64px;
+    }
+
+    /* on a phone the person leads: photo first, then the copy */
+    .hero__figure { order: -1; }
+
+    .hero__figure img {
+      aspect-ratio: 4 / 3;
+      object-position: 62% 28%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero__figure img { aspect-ratio: 1 / 1; }
+  }
+</style>

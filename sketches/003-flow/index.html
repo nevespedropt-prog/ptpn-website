@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PTPN — Personal Training in Enfield | Be fit</title>
+<meta name="description" content="One-to-one personal training in Enfield. Programmed, measured, and built around your life. Packages from £32.50 a session.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#111112; --surface:#161617; --card:#1b1b1c; --line:#242426;
+  --gold:#d7b978; --gold-light:#f1dda9; --gold-deep:#b98a42;
+  --ink:#f4f0e8; --muted:#9c988f;
+  --d:'Inter Tight',system-ui,sans-serif; --b:'Inter',system-ui,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--b);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;font-weight:300}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+h1,h2,h3{font-family:var(--d);font-weight:400;line-height:1.1;letter-spacing:-.03em}
+h1{font-size:clamp(40px,7vw,86px)}
+h2{font-size:clamp(28px,4.4vw,52px)}
+h3{font-size:20px;font-weight:500;letter-spacing:-.015em}
+a{color:inherit;text-decoration:none}
+.k{font-family:var(--d);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep)}
+p.lede{font-size:19px;color:var(--muted);max-width:56ch;font-weight:300}
+
+/* motion primitives */
+[data-r]{opacity:0;transform:translateY(34px);transition:opacity 1.05s var(--ease),transform 1.05s var(--ease)}
+[data-r].in{opacity:1;transform:none}
+[data-r][data-d="1"]{transition-delay:.09s}
+[data-r][data-d="2"]{transition-delay:.18s}
+[data-r][data-d="3"]{transition-delay:.27s}
+[data-r][data-d="4"]{transition-delay:.36s}
+[data-r="fade"]{transform:none}
+[data-r="left"]{transform:translateX(-34px)}
+[data-r="right"]{transform:translateX(34px)}
+[data-r="scale"]{transform:scale(.96);opacity:0}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 34px;border-radius:999px;font-family:var(--d);font-weight:500;font-size:15px;letter-spacing:.01em;transition:transform .5s var(--ease),background .4s,border-color .4s,color .4s;border:1px solid transparent;cursor:pointer}
+.btn-p{background:var(--gold);color:#141414}
+.btn-p:hover{transform:translateY(-2px);background:var(--gold-light)}
+.btn-g{border-color:#2f2f31;color:var(--ink)}
+.btn-g:hover{border-color:var(--gold-deep);color:var(--gold-light);transform:translateY(-2px)}
+
+.ph{position:relative;background:linear-gradient(160deg,#232219 0%,#191918 55%,#141414 100%);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.ph::after{content:attr(data-ph);position:absolute;inset:auto 0 0 0;padding:11px 16px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#66635c;font-family:var(--d);font-weight:500}
+
+/* nav */
+header{position:fixed;top:0;left:0;right:0;z-index:80;transition:background .5s var(--ease),backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent}
+header.stuck{background:rgba(17,17,18,.82);backdrop-filter:blur(16px);border-bottom-color:#1f1f21}
+nav{display:flex;align-items:center;justify-content:space-between;height:92px;transition:height .5s var(--ease)}
+header.stuck nav{height:74px}
+nav img{width:158px;display:block;transition:opacity .4s}
+.links{display:flex;gap:36px;align-items:center}
+.links a{font-size:14.5px;color:var(--muted);transition:color .35s}
+.links a:hover{color:var(--gold-light)}
+.burger{display:none;background:none;border:1px solid #2f2f31;color:var(--ink);width:46px;height:46px;border-radius:999px;font-size:18px;cursor:pointer}
+
+/* hero */
+.hero{padding:220px 0 140px;text-align:center;position:relative;overflow:hidden}
+.glow{position:absolute;top:-260px;left:50%;transform:translateX(-50%);width:900px;height:620px;background:radial-gradient(50% 50% at 50% 50%,rgba(215,185,120,.13),transparent 70%);pointer-events:none}
+.hero .k{display:block;margin-bottom:34px}
+.hero h1{margin-bottom:34px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lede{margin:0 auto 46px}
+.hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.scroll-hint{margin-top:96px;display:flex;flex-direction:column;align-items:center;gap:12px;color:#5c5952;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-family:var(--d);font-weight:500}
+.scroll-hint i{width:1px;height:56px;background:linear-gradient(180deg,var(--gold-deep),transparent);display:block;animation:drop 2.4s var(--ease) infinite}
+@keyframes drop{0%{transform:scaleY(.2);transform-origin:top;opacity:0}40%{opacity:1}100%{transform:scaleY(1);transform-origin:top;opacity:0}}
+
+section{padding:130px 0}
+.sh{max-width:720px;margin-bottom:64px}
+.sh h2{margin-top:22px}
+.center{text-align:center;margin-left:auto;margin-right:auto}
+
+/* three points */
+.points{display:grid;grid-template-columns:repeat(3,1fr);gap:56px}
+.point .n{font-family:var(--d);font-size:13px;color:var(--gold-deep);letter-spacing:.18em;font-weight:500}
+.point h3{margin:18px 0 12px}
+.point p{color:var(--muted);font-size:16px}
+
+/* packages - minimal list */
+.packs{border-top:1px solid var(--line)}
+.pack{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:28px;align-items:center;padding:38px 0;border-bottom:1px solid var(--line);transition:padding .5s var(--ease),background .5s}
+.pack:hover{padding-left:22px;padding-right:22px;background:var(--surface)}
+.pack .nm h3{font-size:24px}
+.pack .nm span{font-size:14.5px;color:var(--muted)}
+.pack .pr{font-family:var(--d);font-size:30px;font-weight:400;letter-spacing:-.03em}
+.pack .pr small{font-size:14px;color:var(--muted);font-weight:300}
+.pack .tt{font-size:14.5px;color:var(--muted)}
+.pack .tag{display:inline-block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-deep);border-radius:999px;padding:5px 13px;margin-left:12px;vertical-align:middle;font-family:var(--d);font-weight:500}
+.pack .go{width:52px;height:52px;border-radius:50%;border:1px solid #2f2f31;display:grid;place-items:center;transition:.45s var(--ease);color:var(--muted)}
+.pack:hover .go{border-color:var(--gold);color:var(--gold);transform:rotate(-45deg)}
+.group{margin-top:52px;display:flex;gap:32px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:34px 38px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:52px}
+.step .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);margin-bottom:26px;box-shadow:0 0 0 6px rgba(215,185,120,.09)}
+.step h3{margin-bottom:12px}
+.step p{color:var(--muted);font-size:16px}
+
+/* coach */
+.coach{display:grid;grid-template-columns:.9fr 1.1fr;gap:80px;align-items:center}
+.coach .ph{aspect-ratio:4/5}
+.coach ul{list-style:none;display:grid;gap:14px;margin-top:32px}
+.coach li{color:var(--muted);font-size:16px;padding-left:22px;position:relative}
+.coach li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:1px;background:var(--gold-deep)}
+
+/* app */
+.appsec{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.feats{list-style:none;display:grid;gap:26px;margin-top:38px}
+.feats li{display:flex;gap:20px;align-items:flex-start}
+.feats .ic{flex:0 0 40px;height:40px;border-radius:50%;border:1px solid #2f2f31;display:grid;place-items:center;color:var(--gold);font-size:13px}
+.feats b{font-family:var(--d);font-weight:500;font-size:17px;display:block;margin-bottom:3px}
+.feats span{color:var(--muted);font-size:15.5px}
+.phones{display:flex;gap:22px;justify-content:center}
+.phone{width:206px;aspect-ratio:9/19;background:#0d0d0e;border:1px solid #2e2e30;border-radius:30px;padding:10px}
+.phone .scr{width:100%;height:100%;border-radius:22px;background:linear-gradient(175deg,#1e1d1a,#141414);border:1px solid #292929;padding:16px;display:flex;flex-direction:column;gap:10px}
+.phone .lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7d7a72;font-family:var(--d);font-weight:500}
+.phone .bar{height:6px;border-radius:3px;background:#2c2c2c}
+.phone .bar.g{background:linear-gradient(90deg,var(--gold-deep),var(--gold))}
+.phone .ring{width:64px;height:64px;border-radius:50%;border:4px solid #2a2a2a;border-top-color:var(--gold);border-right-color:var(--gold-deep);margin:8px auto}
+
+/* quotes */
+.qwrap{text-align:center;max-width:820px;margin:0 auto}
+.quote{font-family:var(--d);font-size:clamp(21px,3vw,34px);font-weight:300;line-height:1.42;letter-spacing:-.02em;min-height:200px;display:flex;align-items:center;justify-content:center;transition:opacity .5s var(--ease)}
+.quote.fade{opacity:0}
+.qwho{margin-top:26px;font-size:14.5px;color:var(--muted)}
+.qdots{display:flex;gap:10px;justify-content:center;margin-top:38px}
+.qdots button{width:9px;height:9px;border-radius:50%;border:0;background:#2f2f31;cursor:pointer;padding:0;transition:.4s}
+.qdots button.on{background:var(--gold);width:30px;border-radius:999px}
+
+/* blog */
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:34px}
+.post .ph{aspect-ratio:16/10;margin-bottom:22px;transition:transform .7s var(--ease)}
+.post:hover .ph{transform:translateY(-6px)}
+.post .meta{font-family:var(--d);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);font-weight:500}
+.post h3{margin:12px 0 10px;font-size:19px}
+.post p{color:var(--muted);font-size:15px}
+
+/* faq */
+.faq{max-width:800px}
+details{border-bottom:1px solid var(--line)}
+summary{padding:30px 44px 30px 0;cursor:pointer;font-family:var(--d);font-size:19px;font-weight:400;list-style:none;position:relative;letter-spacing:-.015em}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";position:absolute;right:8px;top:38px;width:12px;height:1px;background:var(--gold);transition:transform .45s var(--ease)}
+summary::before{content:"";position:absolute;right:13px;top:33px;width:1px;height:12px;background:var(--gold);transition:transform .45s var(--ease)}
+details[open] summary::before{transform:rotate(90deg);opacity:0}
+details p{padding:0 0 32px;color:var(--muted);font-size:16.5px;max-width:68ch}
+
+/* enquiry */
+.enq{background:var(--surface);border-top:1px solid var(--line)}
+.eg{display:grid;grid-template-columns:.85fr 1.15fr;gap:80px}
+form{display:grid;gap:20px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+label{font-family:var(--d);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px;font-weight:500}
+input,select,textarea{width:100%;background:#131314;border:1px solid #2b2b2d;color:var(--ink);padding:15px 18px;font-family:var(--b);font-size:16px;min-height:54px;border-radius:12px;font-weight:300;transition:border-color .4s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold-deep)}
+textarea{min-height:120px;resize:vertical}
+.chips{display:flex;gap:9px;flex-wrap:wrap}
+.chip{border:1px solid #2b2b2d;border-radius:999px;padding:10px 18px;font-size:14.5px;cursor:pointer;color:var(--muted);transition:.35s}
+.chip:hover{border-color:var(--gold-deep);color:var(--gold-light)}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#141414}
+.fine{font-size:13px;color:#6b6861}
+.info{display:grid;gap:22px;margin-top:38px}
+.info b{font-family:var(--d);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:5px;font-weight:500}
+.info span{color:var(--muted);font-size:16px}
+
+footer{background:#0e0e0f;border-top:1px solid var(--line);padding:80px 0 44px}
+.fg{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:48px}
+footer img{width:148px;margin-bottom:22px}
+footer h4{font-family:var(--d);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:500}
+footer ul{list-style:none;display:grid;gap:12px}
+footer a,footer p{font-size:15px;color:var(--muted);font-weight:300}
+footer a:hover{color:var(--gold-light)}
+.fbot{margin-top:56px;padding-top:26px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:13.5px;color:#6b6861}
+
+@media(max-width:960px){
+  .coach,.ag,.eg,.points,.steps{grid-template-columns:1fr;gap:48px}
+  .posts{grid-template-columns:1fr 1fr}
+  .pack{grid-template-columns:1fr auto;gap:14px}
+  .pack .pr,.pack .tt{grid-column:1}
+  .pack .go{grid-row:1;grid-column:2}
+  .links{display:none}.burger{display:block}
+  .fg{grid-template-columns:1fr 1fr}
+  .hero{padding:170px 0 110px}
+}
+@media(max-width:620px){
+  .posts,.fg,.f2{grid-template-columns:1fr}
+  section{padding:88px 0}
+  .phones{flex-direction:column;align-items:center}
+}
+@media(prefers-reduced-motion:reduce){
+  [data-r]{opacity:1!important;transform:none!important;transition:none!important}
+  .scroll-hint i{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header id="hdr"><div class="wrap"><nav>
+  <a href="#" aria-label="PTPN home"><img src="../../brand/ptpn-lockup-520.png" alt="PTPN, Be fit"></a>
+  <div class="links">
+    <a href="#packages">Personal training</a>
+    <a href="#how">How it works</a>
+    <a href="#coach">Your coach</a>
+    <a href="#app">The app</a>
+    <a href="#blog">Blog</a>
+  </div>
+  <a href="#enquire" class="btn btn-p" style="min-height:46px;padding:0 26px;font-size:14px">Enquire</a>
+  <button class="burger" aria-label="Menu">☰</button>
+</nav></div></header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <span class="k" data-r="fade">Personal training · Enfield</span>
+    <h1 data-r data-d="1">Coaching that <em>changes</em> the numbers.</h1>
+    <p class="lede" data-r data-d="2" style="margin-left:auto;margin-right:auto">One-to-one personal training, programmed for you and measured every session. Your plan, your progress and your coach in one place.</p>
+    <div class="cta" data-r data-d="3">
+      <a href="#enquire" class="btn btn-p">Book a free consultation</a>
+      <a href="#packages" class="btn btn-g">See the packages</a>
+    </div>
+    <div class="scroll-hint" data-r="fade" data-d="4"><i></i>Scroll</div>
+  </div>
+</div>
+
+<!-- POINTS -->
+<section>
+  <div class="wrap">
+    <div class="points">
+      <div class="point" data-r><span class="n">01</span><h3>Written for you</h3><p>Your programme is built around your history, your body and the days you can actually train. Nothing generic.</p></div>
+      <div class="point" data-r data-d="1"><span class="n">02</span><h3>Watched, every rep</h3><p>Technique is corrected from session one. That is what keeps you training for years instead of weeks.</p></div>
+      <div class="point" data-r data-d="2"><span class="n">03</span><h3>Measured, always</h3><p>Weight, body fat, strength and consistency, all logged. We adjust the plan on evidence, not opinion.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages">
+  <div class="wrap">
+    <div class="sh" data-r><span class="k">Packages</span><h2>Simple pricing. No contract.</h2></div>
+    <div class="packs">
+      <div class="pack" data-r>
+        <div class="nm"><h3>Express <span class="tag">Entry</span></h3><span>Twelve 30-minute sessions</span></div>
+        <div class="pr">£32.50 <small>/ session</small></div>
+        <div class="tt">£390 total</div>
+        <a href="#enquire" class="go" aria-label="Enquire">→</a>
+      </div>
+      <div class="pack" data-r data-d="1">
+        <div class="nm"><h3>Ignition</h3><span>Four one-hour sessions</span></div>
+        <div class="pr">£54 <small>/ session</small></div>
+        <div class="tt">£216 total</div>
+        <a href="#enquire" class="go" aria-label="Enquire">→</a>
+      </div>
+      <div class="pack" data-r data-d="2">
+        <div class="nm"><h3>Momentum</h3><span>Eight one-hour sessions</span></div>
+        <div class="pr">£48 <small>/ session</small></div>
+        <div class="tt">£384 total</div>
+        <a href="#enquire" class="go" aria-label="Enquire">→</a>
+      </div>
+      <div class="pack" data-r data-d="3">
+        <div class="nm"><h3>Signature <span class="tag">Best value</span></h3><span>Twelve one-hour sessions</span></div>
+        <div class="pr">£40 <small>/ session</small></div>
+        <div class="tt">£480 total</div>
+        <a href="#enquire" class="go" aria-label="Enquire">→</a>
+      </div>
+    </div>
+    <div class="group" data-r>
+      <div><h3>Duo · small group personal training</h3><p style="color:var(--muted);font-size:16px;margin-top:6px">Train with a partner. Minimum two people, minimum one session a week.</p></div>
+      <div style="text-align:right"><div class="pr" style="font-family:var(--d);font-size:30px">£60 <small style="font-size:14px;color:var(--muted)">/ month</small></div></div>
+      <a href="#enquire" class="btn btn-g">Enquire</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sh" data-r><span class="k">How it works</span><h2>Three steps to your first session.</h2></div>
+    <div class="steps">
+      <div class="step" data-r><div class="dot"></div><h3>Get in touch</h3><p>Tell me your goal and the days that work. I reply with the package that fits.</p></div>
+      <div class="step" data-r data-d="1"><div class="dot"></div><h3>Baseline and programme</h3><p>We measure where you are, then your plan is written and loaded into the app.</p></div>
+      <div class="step" data-r data-d="2"><div class="dot"></div><h3>Train and review</h3><p>We train, you log, and we review the numbers together every few weeks.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COACH -->
+<section id="coach">
+  <div class="wrap"><div class="coach">
+    <div class="ph" data-r="left" data-ph="Photo placeholder · portrait of Pedro"></div>
+    <div data-r="right">
+      <span class="k">Your coach</span>
+      <h2 style="margin-top:20px">I am Pedro.</h2>
+      <p class="lede" style="margin-top:22px">[BIO PLACEHOLDER — send me your bio, qualifications and years of experience and this gets written properly.]</p>
+      <ul>
+        <li>[Qualification placeholder]</li>
+        <li>[Specialism placeholder]</li>
+        <li>[Years of experience placeholder]</li>
+        <li>Private studio, Bush Hill Park, Enfield</li>
+      </ul>
+    </div>
+  </div></div>
+</section>
+
+<!-- APP -->
+<section id="app" class="appsec">
+  <div class="wrap"><div class="ag">
+    <div data-r="left">
+      <span class="k">Included with coaching</span>
+      <h2 style="margin-top:20px">Your programme, in your pocket.</h2>
+      <p class="lede" style="margin-top:22px">Every client gets the PTPN app. Your plan, your logging and your progress, on your phone.</p>
+      <ul class="feats">
+        <li><span class="ic">◈</span><div><b>Your plan, day by day</b><span>Sets, reps and weights prescribed for you.</span></div></li>
+        <li><span class="ic">◧</span><div><b>Log every session</b><span>A history that proves the work you have done.</span></div></li>
+        <li><span class="ic">◇</span><div><b>Nutrition targets</b><span>Calories, macros and meal plans set by me.</span></div></li>
+        <li><span class="ic">◎</span><div><b>Progress you can see</b><span>Weight, body fat, measurements and personal bests.</span></div></li>
+      </ul>
+    </div>
+    <div class="phones" data-r="scale">
+      <div class="phone"><div class="scr"><span class="lbl">Today</span><div class="bar g" style="width:70%"></div><div class="bar" style="width:48%"></div><div class="ring"></div><div class="bar" style="width:86%"></div><div class="bar" style="width:58%"></div></div></div>
+      <div class="phone"><div class="scr"><span class="lbl">Progress</span><div class="bar" style="width:44%"></div><div class="ring" style="border-top-color:var(--gold-light)"></div><div class="bar g" style="width:74%"></div><div class="bar" style="width:52%"></div><div class="bar" style="width:80%"></div></div></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- QUOTES -->
+<section>
+  <div class="wrap"><div class="qwrap" data-r>
+    <span class="k">Clients</span>
+    <div class="quote" id="q" style="margin-top:34px">“[TESTIMONIAL PLACEHOLDER] I have trained with other people before and never stuck to it. Having the plan in the app and someone checking the numbers is what made the difference.”</div>
+    <div class="qwho" id="qw">[Client name placeholder] · since 2025</div>
+    <div class="qdots" id="qd"></div>
+    <p class="fine" style="margin-top:24px">Placeholder quotes. Real testimonials go here once you send them.</p>
+  </div></div>
+</section>
+
+<!-- BLOG -->
+<section id="blog" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sh" data-r><span class="k">From the blog</span><h2>Training and nutrition, explained.</h2></div>
+    <div class="posts">
+      <article class="post" data-r><div class="ph" data-ph="Article image"></div><span class="meta">Training</span><h3>[Article title placeholder]</h3><p>[Opening line written to be quotable by search and answer engines.]</p></article>
+      <article class="post" data-r data-d="1"><div class="ph" data-ph="Article image"></div><span class="meta">Nutrition</span><h3>[Article title placeholder]</h3><p>[Opening line written to be quotable by search and answer engines.]</p></article>
+      <article class="post" data-r data-d="2"><div class="ph" data-ph="Article image"></div><span class="meta">Progress</span><h3>[Article title placeholder]</h3><p>[Opening line written to be quotable by search and answer engines.]</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="wrap">
+    <div class="sh" data-r><span class="k">Questions</span><h2>Personal training, answered.</h2></div>
+    <div class="faq" data-r>
+      <details open><summary>How much does personal training cost?</summary><p>Packages start at £32.50 a session for Express, a twelve-session 30-minute pack. The one-hour packs are Ignition at £54 a session for four sessions, Momentum at £48 for eight, and Signature at £40 for twelve. Duo, the small group option, is £60 a month for a minimum of two people training at least once a week. All prices are per session and paid in person.</p></details>
+      <details><summary>Is the first session free?</summary><p>Yes. I offer a free consultation with no obligation. We talk through your goal, your training history and what has stopped you before, and you leave with a clear idea of what working together would look like. There is no charge and no pressure to book anything.</p></details>
+      <details><summary>Do I need experience before I start?</summary><p>No. Plenty of clients have never trained properly before. The first session is an assessment, and the programme is written around what you can do now.</p></details>
+      <details><summary>How many sessions a week do I need?</summary><p>Most clients train two or three times a week. If you train with me less often, I will give you work to do alone and you will log it in the app.</p></details>
+      <details><summary>What happens if I miss a session?</summary><p>Speak to me and we rearrange. A package is a block of sessions, not a weekly contract, so a missed week does not cost you a session.</p></details>
+      <details><summary>Where do we train?</summary><p>In a private studio in Bush Hill Park, Enfield. [Confirm exact address before publishing.]</p></details>
+      <details><summary>Is the app extra?</summary><p>No. The PTPN app comes with coaching at no extra cost.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ENQUIRY -->
+<section id="enquire" class="enq">
+  <div class="wrap"><div class="eg">
+    <div data-r="left">
+      <span class="k">Enquire</span>
+      <h2 style="margin-top:20px">Tell me what you want to change.</h2>
+      <p class="lede" style="margin-top:22px">Answer a few questions and I will come back to arrange your free consultation.</p>
+      <div class="info">
+        <div><b>Email</b><span>info@ptpn.co.uk</span></div>
+        <div><b>Where</b><span>Bush Hill Park, Enfield, London</span></div>
+      </div>
+    </div>
+    <form onsubmit="return false" data-r="right">
+      <div class="f2">
+        <div><label for="n">Your name</label><input id="n" type="text" placeholder="First and last name"></div>
+        <div><label for="e">Email</label><input id="e" type="email" placeholder="you@example.com"></div>
+      </div>
+      <div class="f2">
+        <div><label for="p">Phone (optional)</label><input id="p" type="tel" placeholder="07…"></div>
+        <div><label for="pk">Package you are interested in</label>
+          <select id="pk">
+            <option>Not sure yet, advise me</option>
+            <option>Express · twelve 30-minute sessions · £32.50 each</option>
+            <option>Ignition · four one-hour sessions · £54 each</option>
+            <option>Momentum · eight one-hour sessions · £48 each</option>
+            <option>Signature · twelve one-hour sessions · £40 each</option>
+            <option>Duo · small group · £60 per month</option>
+          </select></div>
+      </div>
+      <div><label>What is your main goal?</label>
+        <div class="chips" id="goal"><span class="chip">Lose body fat</span><span class="chip">Build strength</span><span class="chip">General fitness</span><span class="chip">Return to training</span><span class="chip">Mobility and longevity</span></div></div>
+      <div><label>How often can you train?</label>
+        <div class="chips" id="freq"><span class="chip">Once a week</span><span class="chip">2–3 times a week</span><span class="chip">4+ times a week</span></div></div>
+      <div><label for="m">Anything I should know? (optional)</label><textarea id="m" placeholder="Injuries, an event you are training for, or anything that has stopped you before."></textarea></div>
+      <button class="btn btn-p" style="width:100%">Send enquiry</button>
+      <p class="fine">Design preview. On the live site this writes to the database and emails info@ptpn.co.uk.</p>
+    </form>
+  </div></div>
+</section>
+
+<footer><div class="wrap">
+  <div class="fg">
+    <div><img src="../../brand/ptpn-lockup-520.png" alt="PTPN, Be fit"><p>Personal training in Enfield. Programmed, measured, built to last.</p></div>
+    <div><h4>Coaching</h4><ul><li><a href="#packages">Packages</a></li><li><a href="#how">How it works</a></li><li><a href="#coach">Your coach</a></li><li><a href="#app">The app</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li><a href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a href="#enquire">Send an enquiry</a></li><li>Bush Hill Park, Enfield</li></ul></div>
+    <div><h4>Legal</h4><ul><li><a href="#">Privacy policy</a></li><li><a href="#">Terms</a></li><li><a href="#">Cookie notice</a></li></ul></div>
+  </div>
+  <div class="fbot"><span>© <span id="yr">2026</span> PTPN. All rights reserved.</span><span>Be fit.</span></div>
+</div></footer>
+
+<script>
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* scroll reveals */
+if(RM){ document.querySelectorAll('[data-r]').forEach(e=>e.classList.add('in')); }
+else{
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('[data-r]').forEach(e=>io.observe(e));
+}
+
+/* sticky nav */
+const hdr=document.getElementById('hdr');
+const onScroll=()=>hdr.classList.toggle('stuck', scrollY>40);
+onScroll(); addEventListener('scroll',onScroll,{passive:true});
+
+/* chips */
+document.querySelectorAll('#goal .chip, #freq .chip').forEach(c=>c.addEventListener('click',()=>{
+  c.parentElement.querySelectorAll('.chip').forEach(x=>x.classList.remove('on')); c.classList.add('on');
+}));
+
+/* rotating quotes */
+const Q=[
+ ['“[TESTIMONIAL PLACEHOLDER] I have trained with other people before and never stuck to it. Having the plan in the app and someone checking the numbers is what made the difference.”','[Client name placeholder] · since 2025'],
+ ['“[TESTIMONIAL PLACEHOLDER] The sessions are hard but I never feel judged. I actually look forward to them.”','[Client name placeholder] · since 2024'],
+ ['“[TESTIMONIAL PLACEHOLDER] I came in wanting to lose weight and ended up caring far more about how strong I got.”','[Client name placeholder] · since 2023']
+];
+const q=document.getElementById('q'), qw=document.getElementById('qw'), qd=document.getElementById('qd');
+let qi=0;
+Q.forEach((_,i)=>{ const b=document.createElement('button'); b.setAttribute('aria-label','Quote '+(i+1));
+  if(i===0)b.classList.add('on'); b.onclick=()=>go(i); qd.appendChild(b); });
+function go(i){
+  qi=i; q.classList.add('fade');
+  setTimeout(()=>{ q.textContent=Q[i][0]; qw.textContent=Q[i][1]; q.classList.remove('fade'); },260);
+  [...qd.children].forEach((b,j)=>b.classList.toggle('on', j===i));
+}
+if(!RM) setInterval(()=>go((qi+1)%Q.length), 6500);
+</script>
+</body>
+</html>

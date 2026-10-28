@@ -1,0 +1,76 @@
+---
+import { faqs } from '../data/site';
+
+// FAQPage markup so answer engines can lift these answers directly.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Questions</span>
+      <h2>Personal training, answered.</h2>
+    </div>
+
+    <div class="faq__list">
+      {faqs.map((f, i) => (
+        <details open={i === 0}>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<style>
+  .faq__list { max-width: 880px; }
+
+  .faq details { border-bottom: 1px solid #232325; }
+
+  .faq summary {
+    padding: 26px 46px 26px 0;
+    cursor: pointer;
+    font-family: var(--display);
+    font-size: 18.5px;
+    font-weight: 600;
+    letter-spacing: -.015em;
+    list-style: none;
+    position: relative;
+  }
+
+  .faq summary::-webkit-details-marker { display: none; }
+
+  .faq summary::after {
+    content: "+";
+    position: absolute;
+    right: 6px;
+    top: 22px;
+    color: var(--gold);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .faq details[open] summary::after { content: "–"; }
+
+  .faq details p {
+    padding-bottom: 28px;
+    color: var(--muted);
+    max-width: 72ch;
+  }
+
+  @media (max-width: 640px) {
+    .faq summary { font-size: 17px; padding-right: 38px; }
+  }
+</style>

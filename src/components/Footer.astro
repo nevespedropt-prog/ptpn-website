@@ -1,0 +1,121 @@
+---
+import { site, coach } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__grid">
+      <div class="ftr__brand">
+        <img src="/brand/ptpn-lockup-520.png" alt="PTPN, Be fit" width="520" height="227" />
+        <p>Personal training in Enfield. Programmed, measured, and built to last longer than your motivation.</p>
+      </div>
+
+      <div>
+        <h2 class="ftr__h">Coaching</h2>
+        <ul>
+          <li><a href="/#packages">Packages</a></li>
+          <li><a href="/#method">How it works</a></li>
+          <li><a href="/#coach">Your coach</a></li>
+          <li><a href="/app">The app</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="ftr__h">Contact</h2>
+        <ul>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href="/#contact">Free consultation</a></li>
+          <li>{site.area}</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="ftr__h">Members</h2>
+        <ul>
+          <li><a href={site.appPath}>Member log in</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/privacy">Privacy policy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/cookies">Cookie notice</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ftr__bot">
+      <span>© {year} PTPN. All rights reserved.</span>
+      <span>Be fit.</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    background: #0e0e0f;
+    border-top: 1px solid #1f1f21;
+    padding-block: 72px 40px;
+  }
+
+  .ftr__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 44px;
+  }
+
+  .ftr__brand img {
+    width: 156px;
+    margin-bottom: 22px;
+  }
+
+  .ftr__brand p {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 34ch;
+  }
+
+  .ftr__h {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+
+  .ftr ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 11px;
+  }
+
+  .ftr ul a,
+  .ftr ul li {
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .ftr ul a:hover { color: var(--gold-light); }
+
+  .ftr__bot {
+    margin-top: 56px;
+    padding-top: 26px;
+    border-top: 1px solid #1f1f21;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--faint);
+  }
+
+  @media (max-width: 960px) {
+    .ftr__grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 560px) {
+    .ftr__grid { grid-template-columns: 1fr; gap: 34px; }
+  }
+</style>

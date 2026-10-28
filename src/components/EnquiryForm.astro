@@ -1,0 +1,255 @@
+---
+import { packages, duo, site } from '../data/site';
+
+const goals = ['Lose body fat', 'Build strength', 'General fitness', 'Return to training', 'Mobility and longevity'];
+const freq = ['Once a week', '2–3 times a week', '4+ times a week'];
+const options = [
+  'Not sure yet, advise me',
+  ...packages.map((p) => `${p.name} · ${p.tagline} · £${p.perSession} each`),
+  `${duo.name} · small group · £${duo.price} per ${duo.period}`,
+];
+---
+
+<section class="enq" id="contact">
+  <div class="wrap enq__grid">
+    <div class="enq__intro">
+      <span class="eyebrow">Enquire</span>
+      <h2>Tell me what you want to change.</h2>
+      <p class="lede">
+        Answer a few questions and I will come back to arrange your free consultation and suggest the
+        package that fits.
+      </p>
+
+      <dl class="enq__info">
+        <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+        <div><dt>Where</dt><dd>{site.area}</dd></div>
+        <div><dt>Already a client?</dt><dd><a class="enq__app" href={site.appPath}>Sign in to the app</a></dd></div>
+      </dl>
+    </div>
+
+    <form class="enq__form" id="enquiry-form" novalidate>
+      {/* honeypot — bots fill it, humans don't */}
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0" />
+      <div class="enq__row">
+        <div>
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" required autocomplete="name" placeholder="First and last name" />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" />
+        </div>
+      </div>
+
+      <div class="enq__row">
+        <div>
+          <label for="phone">Phone (optional)</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="07…" />
+        </div>
+        <div>
+          <label for="package">Package you are interested in</label>
+          <select id="package" name="package">
+            {options.map((o) => <option>{o}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <fieldset class="enq__set">
+        <legend>What is your main goal?</legend>
+        <div class="enq__chips">
+          {goals.map((g, i) => (
+            <label class="chip">
+              <input type="radio" name="goal" value={g} required={i === 0} />
+              <span>{g}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset class="enq__set">
+        <legend>How often can you train?</legend>
+        <div class="enq__chips">
+          {freq.map((f) => (
+            <label class="chip">
+              <input type="radio" name="frequency" value={f} />
+              <span>{f}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="message">Anything I should know? (optional)</label>
+        <textarea id="message" name="message"
+          placeholder="Injuries, an event you are training for, or anything that has stopped you before."></textarea>
+      </div>
+
+      <button class="btn btn--primary btn--block" type="submit" id="enquiry-submit">Send enquiry</button>
+      <p class="enq__status" id="enquiry-status" role="status" aria-live="polite"></p>
+      <p class="fine">
+        I reply to every enquiry personally, usually within one working day. Your details are only used
+        to answer you.
+      </p>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { supabase } from '../lib/supabase';
+  const form = document.getElementById('enquiry-form') as HTMLFormElement | null;
+  const btn = document.getElementById('enquiry-submit') as HTMLButtonElement | null;
+  const status = document.getElementById('enquiry-status') as HTMLElement | null;
+  function say(msg: string, ok: boolean) {
+    if (!status) return;
+    status.textContent = msg;
+    status.dataset.ok = ok ? '1' : '0';
+  }
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    if ((fd.get('website') as string)?.trim()) return; // honeypot
+    const name = String(fd.get('name') ?? '').trim();
+    const email = String(fd.get('email') ?? '').trim();
+    const phone = String(fd.get('phone') ?? '').trim();
+    const pkg = String(fd.get('package') ?? '').trim();
+    const goal = String(fd.get('goal') ?? '').trim();
+    const frequency = String(fd.get('frequency') ?? '').trim();
+    const message = String(fd.get('message') ?? '').trim();
+    if (!name || name.length < 2) { say('Please enter your name.', false); return; }
+    if (!email || !email.includes('@')) { say('Please enter a valid email.', false); return; }
+    if (!goal) { say('Please pick a goal.', false); return; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    say('', true);
+    const { error } = await supabase.from('enquiries').insert({ name, email, phone, package: pkg, goal, frequency, message });
+    if (error) {
+      say(error.message || 'Something went wrong. Please try again or email info@ptpn.co.uk directly.', false);
+      if (btn) { btn.disabled = false; btn.textContent = 'Send enquiry'; }
+      return;
+    }
+    form.reset();
+    if (btn) { btn.textContent = 'Sent ✓'; }
+    say('Thanks — your enquiry is with Pedro. He will reply within one working day.', true);
+    setTimeout(() => { if (btn) { btn.disabled = false; btn.textContent = 'Send enquiry'; } }, 2500);
+  });
+</script>
+
+<style>
+  .enq__status { font-size: 14px; min-height: 1.2em; margin: 2px 0 0; }
+  .enq__status[data-ok="0"] { color: #f0a0a0; }
+  .enq__status[data-ok="1"] { color: var(--gold-light); }
+
+  .enq {
+    background: linear-gradient(180deg, #171718, #111112);
+    border-top: 1px solid #1f1f21;
+  }
+
+  .enq__grid {
+    display: grid;
+    grid-template-columns: .9fr 1.1fr;
+    gap: 70px;
+  }
+
+  .enq h2 { margin-top: 22px; }
+  .enq__intro .lede { margin-top: 22px; }
+
+  .enq__info {
+    display: grid;
+    gap: 16px;
+    margin-top: 34px;
+  }
+
+  .enq__info dt {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .enq__info dd {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15.5px;
+  }
+
+  .enq__app { color: var(--gold); border-bottom: 1px solid var(--gold-deep); }
+
+  .enq__form {
+    display: grid;
+    gap: 18px;
+  }
+
+  .enq__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .enq__set {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .enq__set legend {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 11px;
+    padding: 0;
+  }
+
+  .enq__chips {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+  }
+
+  .chip { margin: 0; }
+
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .chip span {
+    display: block;
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    padding: 10px 16px;
+    font-family: var(--body);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color .2s, color .2s, background .2s;
+  }
+
+  .chip span:hover { border-color: var(--gold-deep); color: var(--gold-light); }
+
+  .chip input:checked + span {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #141414;
+    font-weight: 600;
+  }
+
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 960px) {
+    .enq__grid { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  @media (max-width: 560px) {
+    .enq__row { grid-template-columns: 1fr; }
+  }
+</style>

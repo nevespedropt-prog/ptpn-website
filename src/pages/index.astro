@@ -1,5 +1,5 @@
 ---
-import { site, coach } from '../data/site';
+import { site, coach, faqs } from '../data/site';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import Packages from '../components/Packages.astro';
 import Faq from '../components/Faq.astro';
@@ -25,6 +25,18 @@ const ogImage = new URL('/images/hero-seated.jpg', Astro.site).href;
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
 <meta name="theme-color" content="#08080a" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context":"https://schema.org","@type":"HealthAndBeautyBusiness",
+      "@id": site.url + "/#business", name:"PTPN Personal Training", alternateName:"PTPN Be fit",
+      url: site.url, email: site.email, description: site.description,
+      image: ogImage, priceRange:"£32.50-£54 per session", currenciesAccepted:"GBP", paymentAccepted:"Cash, Bank transfer",
+      slogan:"Be fit", areaServed:{"@type":"Place", name:"Bush Hill Park, Enfield, London"},
+      employee:{"@type":"Person", name:"Pedro", jobTitle:"Personal Trainer", worksFor:{"@id": site.url + "/#business"}},
+    })} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context":"https://schema.org","@type":"FAQPage",
+      mainEntity: faqs.map(f => ({"@type":"Question", name:f.q, acceptedAnswer:{"@type":"Answer", text:f.a}}))
+    })} />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300..700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />

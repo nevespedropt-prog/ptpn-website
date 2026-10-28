@@ -109,12 +109,12 @@ h3{font-family:var(--serif);font-weight:600;font-size:clamp(21px,2vw,28px);line-
 /* ---------- nav ---------- */
 header{position:fixed;top:0;left:0;right:0;z-index:80;transition:background .5s var(--ease),border-color .5s var(--ease)}
 header.solid{background:rgba(8,8,10,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:80px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:32px;height:80px}
 .nav img{width:136px}
 .nav ul{display:flex;gap:34px;list-style:none}
 .nav ul a{font-size:14.5px;color:rgba(244,241,234,.9);transition:color .3s var(--ease)}
 .nav ul a:hover{color:var(--gold-light)}
-.nav__r{display:flex;align-items:center;gap:22px}
+.nav__r{display:flex;align-items:center;gap:20px;flex:0 0 auto}
 .nav__r a{font-size:14.5px;color:rgba(244,241,234,.9)}
 
 /* ---------- 1. HERO (kept from mock 1) ---------- */
@@ -257,6 +257,41 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 .no-motion .mask>.ln,.gsap-fail .mask>.ln{transform:none}
 .no-motion .split__media img,.gsap-fail .split__media img{clip-path:inset(0)}
 
+
+/* ---------- coach micro-stats ---------- */
+.coachline{display:flex;align-items:center;gap:22px;margin-top:30px;font-size:14.5px;color:var(--muted);flex-wrap:wrap}
+.coachline b{color:var(--gold-light);font-weight:500;font-family:var(--serif);font-size:17px}
+.coachline i{width:1px;height:16px;background:var(--line-gold)}
+
+/* ---------- bio modal widget ---------- */
+.bio{position:fixed;inset:0;z-index:150;display:grid;place-items:center;visibility:hidden;opacity:0;
+  transition:opacity .35s var(--ease),visibility .35s}
+.bio.open{visibility:visible;opacity:1}
+.bio__scrim{position:absolute;inset:0;background:rgba(4,4,6,.72);backdrop-filter:blur(6px)}
+.bio__card{position:relative;width:min(560px,calc(100vw - 40px));max-height:82vh;overflow:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(215,185,120,.35) transparent;
+  background:#0d0d10;border:1px solid var(--line-gold);padding:44px 46px;
+  box-shadow:0 60px 140px -30px rgba(0,0,0,.9);transform:translateY(26px) scale(.985);
+  transition:transform .45s var(--ease)}
+.bio.open .bio__card{transform:none}
+
+.bio__card::-webkit-scrollbar{width:8px}
+.bio__card::-webkit-scrollbar-thumb{background:rgba(215,185,120,.3);border-radius:8px}
+.bio__card::-webkit-scrollbar-track{background:transparent}
+.bio__x{position:absolute;top:16px;right:18px;background:none;border:0;color:var(--muted);font-size:16px;cursor:pointer;
+  padding:8px;transition:color .3s var(--ease)}
+.bio__x:hover{color:var(--gold-light)}
+.bio__card h3{font-family:var(--serif);font-size:26px;margin:16px 0 6px;color:#fff}
+.bio__card h3 i{font-style:normal;color:var(--gold);font-size:18px}
+.bio__card p{margin-top:16px;font-size:15.5px;line-height:1.72;color:var(--muted)}
+.bio__card h4{margin-top:28px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold)}
+.bio__creds{margin-top:14px;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:9px 22px}
+.bio__creds li{font-size:13.5px;color:var(--ink-2);display:flex;gap:10px}
+.bio__creds li::before{content:"—";color:var(--gold-deep)}
+.bio .fine{margin-top:18px;font-size:11px}
+.bio__cta{margin-top:26px}
+@media (max-width:560px){.bio__card{padding:32px 24px}.bio__creds{grid-template-columns:1fr}}
 @media (max-width:1080px){
   :root{--gut:22px}
   .nav ul{display:none}
@@ -468,7 +503,11 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     <h2 class="split-h" style="margin-top:20px">{coach.headline}</h2>
     <p class="rv">An ex-basketball player, coaching since 2016 and in the industry for over ten years. More than 10,000 sessions and classes delivered, and a specialism in the people everyone else writes off — bad knees, bad backs, and a long time away from it.</p>
     <p class="rv">You get a training plan, nutrition targets and goal setting. My attention to detail and your commitment are the ingredients — and I coach you every step of the way.</p>
-    <a class="btn btn--ghost magnetic rv" href="#contact">Read my story</a>
+    <div class="coachline rv"><span>Since <b>2016</b></span><i></i><span><b>10,000+</b> sessions</span><i></i><span><b>Level 3</b> PT</span></div>
+    <div class="hero__cta rv" style="margin-top:34px">
+      <button class="btn btn--ghost magnetic" type="button" id="open-bio">Read my story</button>
+      <a class="btn magnetic" href="#contact">Book a free consultation</a>
+    </div>
   </div>
 </div>
 
@@ -548,6 +587,22 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 <section class="pad" style="border-top:1px solid var(--line)"><div class="wrap"><Testimonials /></div></section>
 <section class="band"><div class="wrap"><Faq /></div></section>
 <EnquiryForm />
+
+<!-- ===== BIO MODAL ===== -->
+<div class="bio" id="bio-modal" aria-hidden="true">
+  <div class="bio__scrim" data-close></div>
+  <div class="bio__card" role="dialog" aria-modal="true" aria-labelledby="bio-title">
+    <button class="bio__x" type="button" data-close aria-label="Close">&#10005;</button>
+    <span class="eyebrow">Your coach</span>
+    <h3 id="bio-title">Pedro — PTPN <i>“Be fit”</i></h3>
+    <p>{coach.intro}</p>
+    {coach.story.map((para) => <p>{para}</p>)}
+    <h4>Qualifications</h4>
+    <ul class="bio__creds">{coach.qualifications.map((q) => <li>{q}</li>)}</ul>
+    <p class="fine">I specialise in: {coach.specialisms.join(' · ')}</p>
+    <div class="bio__cta"><a class="btn btn--sm magnetic" href="#contact" data-close>Book a free consultation</a></div>
+  </div>
+</div>
 
 <footer>
   <div class="wrap">
@@ -917,6 +972,24 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 
   window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
   window.addEventListener('resize', function(){ ScrollTrigger.refresh(); });
+})();
+</script>
+
+<script is:inline>
+(function(){
+  var modal = document.getElementById('bio-modal');
+  var openBtn = document.getElementById('open-bio');
+  var lastFocus = null;
+  function show(on){
+    modal.classList.toggle('open', on);
+    modal.setAttribute('aria-hidden', on ? 'false' : 'true');
+    document.body.style.overflow = on ? 'hidden' : '';
+    if (on){ lastFocus = document.activeElement; setTimeout(function(){ var x = modal.querySelector('.bio__x'); if (x) x.focus(); }, 60); }
+    else if (lastFocus) lastFocus.focus();
+  }
+  openBtn && openBtn.addEventListener('click', function(){ show(true); });
+  modal.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click', function(){ show(false); }); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.classList.contains('open')) show(false); });
 })();
 </script>
 </body>

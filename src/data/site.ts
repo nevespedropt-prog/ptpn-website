@@ -186,9 +186,9 @@ export const faqs = [
 ];
 
 export const nav = [
-  { href: '/#packages', label: 'Personal training' },
-  { href: '/#method', label: 'How it works' },
-  { href: '/#coach', label: 'Your coach' },
-  { href: '/#app', label: 'The app' },
-  { href: '/blog', label: 'Blog' },
+  { href: '../#packages', label: 'Personal training' },
+  { href: '../#method', label: 'How it works' },
+  { href: '../#coach', label: 'Your coach' },
+  { href: '../#app', label: 'The app' },
+  { href: '../blog', label: 'Blog' },
 ];

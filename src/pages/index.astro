@@ -18,7 +18,7 @@ const ogImage = new URL('/images/hero-seated.jpg', Astro.site).href;
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
-<link rel="icon" href="/brand/ptpn-favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="./brand/ptpn-favicon.svg" type="image/svg+xml" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
@@ -299,7 +299,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 
 
 <div class="intro" id="intro">
-  <img src="/brand/ptpn-lockup-520.png" alt="PTPN">
+  <img src="./brand/ptpn-lockup-520.png" alt="PTPN">
   <div class="intro__bar" id="introBar"></div>
 </div>
 <div class="grain"></div>
@@ -309,7 +309,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 
 <header id="hdr">
   <div class="wrap nav">
-    <img src="/brand/ptpn-lockup-520.png" alt="PTPN">
+    <img src="./brand/ptpn-lockup-520.png" alt="PTPN">
     <ul>
       <li><a class="ul" href="#packages">Personal training</a></li>
       <li><a class="ul" href="#method">The method</a></li>
@@ -317,7 +317,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
       <li><a class="ul" href="#results">Results</a></li>
     </ul>
     <div class="nav__r">
-      <a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>      <a class="ul" href="/admin">Admin</a>
+      <a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>      <a class="ul" href="./admin">Admin</a>
       <a class="btn btn--sm magnetic" href="#contact">Enquire</a>
     </div>
   </div>
@@ -325,7 +325,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 
 <!-- ================= HERO ================= -->
 <section class="hero">
-  <div class="hero__media" id="heroMedia"><img id="heroImg" src="/images/hero-seated.jpg" alt="Pedro, personal trainer"></div>
+  <div class="hero__media" id="heroMedia"><img id="heroImg" src="./images/hero-seated.jpg" alt="Pedro, personal trainer"></div>
   <div class="wrap hero__in">
     <h1>
       <span class="mask"><span class="ln">Coaching that</span></span>
@@ -462,7 +462,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 
 <!-- ================= COACH ================= -->
 <div class="split" id="coach">
-  <div class="split__media"><img id="coachImg" src="/images/coach-05-battle-ropes.jpg" alt="Pedro coaching"></div>
+  <div class="split__media"><img id="coachImg" src="./images/coach-05-battle-ropes.jpg" alt="Pedro coaching"></div>
   <div class="split__copy">
     <span class="eyebrow rv">Your coach</span>
     <h2 class="split-h" style="margin-top:20px">{coach.headline}</h2>
@@ -493,7 +493,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 
 <!-- ================= STATEMENT ================= -->
 <section class="statement">
-  <div class="statement__bg" id="stmtBg"><img src="/images/hero-plate2.jpg" alt=""></div>
+  <div class="statement__bg" id="stmtBg"><img src="./images/hero-plate2.jpg" alt=""></div>
   <div class="wrap statement__in">
     <h2 class="split-h">Progress you can see, not guess at.</h2>
     <p class="rv">Weight, body fat, the loads you move and how often you turn up. If something is not working, the numbers say so before you have wasted three months.</p>
@@ -508,7 +508,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   </div>
   <div class="wrap stack">
     <article class="scard rv" style="--i:0">
-      <div class="scard__img"><img src="/images/hero-seated.jpg" alt=""></div>
+      <div class="scard__img"><img src="./images/hero-seated.jpg" alt=""></div>
       <div class="scard__body">
         <b>“My first ever workout, at 55.”</b>
         <p>Pedro has improved my strength and fitness, pushing me harder over time, within my limits. For me it was my first ever time working out, at the age of 55 with dodgy knees.</p>
@@ -516,7 +516,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
       </div>
     </article>
     <article class="scard rv" style="--i:1">
-      <div class="scard__img"><img src="/images/coach-04-kettlebell-squat.jpg" alt=""></div>
+      <div class="scard__img"><img src="./images/coach-04-kettlebell-squat.jpg" alt=""></div>
       <div class="scard__body">
         <b>“Exercises I never imagined.”</b>
         <p>After three months I was able to perform exercises I never imagined I could. I gained 5kg of muscle mass and feel more energetic and active than ever.</p>
@@ -524,7 +524,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
       </div>
     </article>
     <article class="scard rv" style="--i:2">
-      <div class="scard__img"><img src="/images/coach-05-battle-ropes.jpg" alt=""></div>
+      <div class="scard__img"><img src="./images/coach-05-battle-ropes.jpg" alt=""></div>
       <div class="scard__body">
         <b>“Knowledgeable and supportive.”</b>
         <p>The trainers are incredibly knowledgeable and supportive, always pushing me to reach my goals while ensuring I stay safe and motivated.</p>
@@ -553,11 +553,11 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   <div class="wrap">
     <div class="foot">
       <div>
-        <img src="/brand/ptpn-lockup-520.png" alt="PTPN">
+        <img src="./brand/ptpn-lockup-520.png" alt="PTPN">
         <p>One-to-one personal training in Bush Hill Park, Enfield. Programmed for you, measured every session.</p>
       </div>
       <div><h5>Coaching</h5><ul><li><a class="ul" href="#packages">Personal training</a></li><li><a class="ul" href="#method">The method</a></li><li><a class="ul" href="#packages">Packages</a></li><li><a class="ul" href="#packages">Duo</a></li></ul></div>
-      <div><h5>More</h5><ul><li><a class="ul" href="#coach">Your coach</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">The app</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>      <a class="ul" href="/admin">Admin</a></li></ul></div>
+      <div><h5>More</h5><ul><li><a class="ul" href="#coach">Your coach</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">The app</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>      <a class="ul" href="./admin">Admin</a></li></ul></div>
       <div><h5>Contact</h5><ul><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href="#contact">Book a consultation</a></li></ul></div>
     </div>
     <div class="foot__bar"><span>© 2026 PTPN</span><span>Bush Hill Park, Enfield, London</span></div>

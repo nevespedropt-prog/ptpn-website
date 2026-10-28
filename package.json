@@ -3,10 +3,10 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "PTPN — personal training website and member app shell",
+  "description": "PTPN \u2014 personal training website and member app shell",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node postbuild.mjs",
     "preview": "astro preview",
     "check": "astro check"
   },

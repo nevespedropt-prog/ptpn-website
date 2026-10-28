@@ -1,10 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import path from 'node:path';
 
-// The marketing site is static on purpose: complete HTML for search and answer
-// engines, zero JavaScript by default. The member app is served separately
-// under /app (built from its own repo and copied in at deploy time).
+const norm = (s) => s.replace(/^\/+/, '').replace(/\/+$/, '');
+
 export default defineConfig({
   site: 'https://www.ptpn.co.uk',
   trailingSlash: 'ignore',
@@ -13,14 +13,7 @@ export default defineConfig({
     format: 'directory',
   },
   integrations: [
-    sitemap({
-      filter: (page) => !page.includes('/app/'),
-    }),
+    sitemap({ filter: (page) => !page.includes('/app/') }),
   ],
-  vite: {
-    build: {
-      // the marketing site ships no framework runtime
-      assetsInlineLimit: 2048,
-    },
-  },
+  vite: { build: { assetsInlineLimit: 2048 } },
 });

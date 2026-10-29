@@ -14,6 +14,7 @@ img,svg,video{display:block;max-width:100%}img{height:auto}a{color:inherit;text-
 button,input,select,textarea{font:inherit;color:inherit}
 h1,h2,h3,h4{font-family:'Source Serif 4',Georgia,serif;font-weight:600;line-height:1.06;letter-spacing:-.02em;text-wrap:balance}
 h1{font-size:clamp(50px,8.4vw,124px);line-height:.96;color:#fff}
+h2{color:#fff}
 h2{font-size:clamp(32px,4.2vw,62px);line-height:1.05}
 h3{font-size:clamp(21px,2vw,28px);line-height:1.16}
 p{text-wrap:pretty}.lede{font-size:17.5px;color:var(--muted);max-width:58ch;line-height:1.68}

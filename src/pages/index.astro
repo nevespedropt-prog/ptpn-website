@@ -2,6 +2,7 @@
 import { site, coach, faqs } from '../data/site';
 import Packages from '../components/Packages.astro';
 import Testimonials from '../components/Testimonials.astro';
+import Faq from '../components/Faq.astro';
 const title = site.title;
 const description = site.description;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -599,6 +600,8 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     <div class="bio__cta"><a class="btn btn--sm magnetic" href="./contact" data-close>Book a free consultation</a></div>
   </div>
 </div>
+
+<section class="band"><div class="wrap"><Faq /></div></section>
 
 <footer>
   <div class="wrap">

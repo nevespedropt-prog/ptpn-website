@@ -1,8 +1,10 @@
 ---
 import { packages, duo, site } from '../data/site';
 
-const goals = ['Lose body fat', 'Build strength', 'General fitness', 'Return to training', 'Mobility and longevity'];
+const goals = ['Lose fat', 'Build muscle', 'Improve my health', 'Strength & performance'];
 const freq = ['Once a week', '2–3 times a week', '4+ times a week'];
+const genders = ['Male', 'Female', 'Prefer not to say'];
+const countries = ['United Kingdom','Ireland','Netherlands','Belgium','France','Germany','Spain','Portugal','Other (in Europe)'];
 const options = [
   'Not sure yet, advise me',
   ...packages.map((p) => `${p.name} · ${p.tagline} · £${p.perSession} each`),
@@ -27,41 +29,63 @@ const options = [
       </dl>
     </div>
 
-    <form class="enq__form" id="enquiry-form" novalidate>
+    <form class="enq__card" id="enquiry-form" novalidate>
       {/* honeypot — bots fill it, humans don't */}
       <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0" />
+
+      <h3 class="enq__sec">Enquiry details</h3>
       <div class="enq__row">
         <div>
-          <label for="name">Your name</label>
-          <input id="name" name="name" type="text" required autocomplete="name" placeholder="First and last name" />
+          <label for="country">I am based in</label>
+          <select id="country" name="country">{countries.map((o) => <option>{o}</option>)}</select>
         </div>
         <div>
-          <label for="email">Email</label>
+          <label for="location">Town / area <span class="enq__req">*</span></label>
+          <input id="location" name="location" type="text" required autocomplete="address-level2" placeholder="e.g. Enfield" />
+        </div>
+      </div>
+      <div>
+        <label for="package">Package you are interested in</label>
+        <select id="package" name="package">{options.map((o) => <option>{o}</option>)}</select>
+      </div>
+
+      <h3 class="enq__sec">Your details</h3>
+      <div class="enq__row">
+        <div>
+          <label for="fname">First name <span class="enq__req">*</span></label>
+          <input id="fname" name="fname" type="text" required autocomplete="given-name" placeholder="First name" />
+        </div>
+        <div>
+          <label for="lname">Last name <span class="enq__req">*</span></label>
+          <input id="lname" name="lname" type="text" required autocomplete="family-name" placeholder="Last name" />
+        </div>
+      </div>
+      <div class="enq__row">
+        <div>
+          <label for="email">Email <span class="enq__req">*</span></label>
           <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" />
         </div>
+        <div>
+          <label for="phone">Phone number (optional)</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="07700 900 000" />
+        </div>
       </div>
 
-      <div class="enq__row">
-        <div>
-          <label for="phone">Phone (optional)</label>
-          <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="07…" />
+      <h3 class="enq__sec">About you</h3>
+      <fieldset class="enq__set">
+        <legend>Gender</legend>
+        <div class="enq__chips">
+          {genders.map((g) => (
+            <label class="chip"><input type="radio" name="gender" value={g} /><span>{g}</span></label>
+          ))}
         </div>
-        <div>
-          <label for="package">Package you are interested in</label>
-          <select id="package" name="package">
-            {options.map((o) => <option>{o}</option>)}
-          </select>
-        </div>
-      </div>
+      </fieldset>
 
       <fieldset class="enq__set">
-        <legend>What is your main goal?</legend>
-        <div class="enq__chips">
-          {goals.map((g, i) => (
-            <label class="chip">
-              <input type="radio" name="goal" value={g} required={i === 0} />
-              <span>{g}</span>
-            </label>
+        <legend>What is your main goal? <span class="enq__req">*</span></legend>
+        <div class="enq__chips enq__chips--big">
+          {goals.map((g) => (
+            <label class="chip"><input type="radio" name="goal" value={g} required /><span>{g}</span></label>
           ))}
         </div>
       </fieldset>
@@ -70,25 +94,32 @@ const options = [
         <legend>How often can you train?</legend>
         <div class="enq__chips">
           {freq.map((f) => (
-            <label class="chip">
-              <input type="radio" name="frequency" value={f} />
-              <span>{f}</span>
-            </label>
+            <label class="chip"><input type="radio" name="frequency" value={f} /><span>{f}</span></label>
           ))}
         </div>
       </fieldset>
 
-      <div>
+      <div class="enq__set">
         <label for="message">Anything I should know? (optional)</label>
         <textarea id="message" name="message"
           placeholder="Injuries, an event you are training for, or anything that has stopped you before."></textarea>
       </div>
 
+      <h3 class="enq__sec">Marketing preferences</h3>
+      <label class="enq__check">
+        <input type="checkbox" name="mc_content" />
+        <span><b>Expert fitness content.</b> Training and nutrition notes, a few times a month. No noise.</span>
+      </label>
+      <label class="enq__check">
+        <input type="checkbox" name="mc_offers" />
+        <span><b>Offers and updates.</b> Occasional news on packages, Duo spots and challenges.</span>
+      </label>
+
       <button class="btn btn--primary btn--block" type="submit" id="enquiry-submit">Send enquiry</button>
       <p class="enq__status" id="enquiry-status" role="status" aria-live="polite"></p>
       <p class="fine">
         I reply to every enquiry personally, usually within one working day. Your details are only used
-        to answer you.
+        to answer you and, if you tick the boxes above, to send what you asked for.
       </p>
     </form>
   </div>
@@ -108,19 +139,37 @@ const options = [
     e.preventDefault();
     const fd = new FormData(form);
     if ((fd.get('website') as string)?.trim()) return; // honeypot
-    const name = String(fd.get('name') ?? '').trim();
+    const fname = String(fd.get('fname') ?? '').trim();
+    const lname = String(fd.get('lname') ?? '').trim();
     const email = String(fd.get('email') ?? '').trim();
     const phone = String(fd.get('phone') ?? '').trim();
+    const country = String(fd.get('country') ?? '').trim();
+    const location = String(fd.get('location') ?? '').trim();
     const pkg = String(fd.get('package') ?? '').trim();
     const goal = String(fd.get('goal') ?? '').trim();
     const frequency = String(fd.get('frequency') ?? '').trim();
+    const gender = String(fd.get('gender') ?? '').trim();
+    const mcContent = fd.get('mc_content') === 'on';
+    const mcOffers = fd.get('mc_offers') === 'on';
     const message = String(fd.get('message') ?? '').trim();
-    if (!name || name.length < 2) { say('Please enter your name.', false); return; }
+    if (!fname || !lname) { say('Please enter your first and last name.', false); return; }
     if (!email || !email.includes('@')) { say('Please enter a valid email.', false); return; }
-    if (!goal) { say('Please pick a goal.', false); return; }
+    if (!location) { say('Please tell me your town or area.', false); return; }
+    if (!goal) { say('Please pick your main goal.', false); return; }
     if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
     say('', true);
-    const { error } = await supabase.from('enquiries').insert({ name, email, phone, package: pkg, goal, frequency, message });
+    const name = fname + ' ' + lname;
+    const fullMsg = [
+      `Based in: ${country} / ${location}`,
+      message ? `Notes: ${message}` : '',
+      mcContent ? 'Wants fitness content: yes' : '',
+      mcOffers ? 'Wants offers/updates: yes' : '',
+    ].filter(Boolean).join('\n');
+    const { error } = await supabase.from('enquiries').insert({
+      name, first_name: fname, last_name: lname, email, phone,
+      package: pkg, goal, frequency, gender,
+      marketing: mcContent || mcOffers, message: fullMsg,
+    });
     if (error) {
       say(error.message || 'Something went wrong. Please try again or email info@ptpn.co.uk directly.', false);
       if (btn) { btn.disabled = false; btn.textContent = 'Send enquiry'; }
@@ -135,35 +184,54 @@ const options = [
 
 <style>
   .enq { background: #0a0a0c; border-top: 1px solid rgba(255,255,255,.10); }
-  .enq__grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 70px; }
+  .enq__grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 70px; align-items: start; }
   .enq h2 { margin-top: 22px; }
+  .enq__intro { position: sticky; top: 100px; }
   .enq__intro .lede { margin-top: 22px; }
   .enq__info { display: grid; gap: 16px; margin-top: 34px; }
   .enq__info dt { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .2em;
     text-transform: uppercase; color: #d7b978; margin-bottom: 4px; }
   .enq__info dd { margin: 0; color: #8d8d93; font-size: 15.5px; }
   .enq__app { color: #f1dda9; border-bottom: 1px solid rgba(215,185,120,.4); }
-  .enq__form { display: grid; gap: 18px; }
+
+  .enq__card { background: #0d0d11; border: 1px solid rgba(255,255,255,.12); border-radius: 14px;
+    padding: 40px 42px; display: grid; gap: 18px; }
+  .enq__sec { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500;
+    letter-spacing: .22em; text-transform: uppercase; color: #d7b978;
+    padding-bottom: 12px; border-bottom: 1px solid rgba(215,185,120,.18); margin-top: 14px; }
+  .enq__sec:first-child { margin-top: 0; }
+  .enq__req { color: #d7b978; }
   .enq__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .enq__set { border: 0; padding: 0; margin: 0; }
   .enq__set legend { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .18em;
     text-transform: uppercase; color: #8d8d93; margin-bottom: 11px; padding: 0; }
   .enq__chips { display: flex; gap: 9px; flex-wrap: wrap; }
+  .enq__chips--big .chip span { padding: 12px 22px; font-size: 14.5px; }
   .chip { margin: 0; }
   .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  .chip span { display: block; border: 1px solid rgba(255,255,255,.14); border-radius: 999px;
-    padding: 10px 18px; font-size: 14px; color: #8d8d93; cursor: pointer;
+  .chip span { display: block; border: 1px solid rgba(255,255,255,.16); border-radius: 999px;
+    padding: 10px 18px; font-size: 14px; color: #b9b5ac; cursor: pointer;
     transition: border-color .3s cubic-bezier(.16,1,.3,1), color .3s, background .3s; }
   .chip span:hover { border-color: rgba(215,185,120,.55); color: #f1dda9; }
   .chip input:checked + span { background: #d7b978; border-color: #d7b978; color: #0b0a06; font-weight: 500; }
   .chip input:focus-visible + span { outline: 2px solid #d7b978; outline-offset: 2px; }
-  .enq label:not(.chip) { color: #8d8d93; }
-  .enq input:not([type=radio]), .enq select, .enq textarea {
-    background: #0f0f12; border: 1px solid rgba(255,255,255,.18); border-radius: 0; color: #f4f1ea; }
-  .enq input:focus, .enq select:focus, .enq textarea:focus { border-color: rgba(215,185,120,.6); }
+
+  .enq__card label:not(.chip):not(.enq__check) { color: #8d8d93; }
+  .enq input:not([type=radio]):not([type=checkbox]), .enq select, .enq textarea {
+    background: #0a0a0d; border: 1px solid rgba(255,255,255,.16); border-radius: 8px; color: #f4f1ea; }
+  .enq input:focus, .enq select:focus, .enq textarea:focus { border-color: rgba(215,185,120,.65); outline: none; }
+
+  .enq__check { display: flex; gap: 14px; align-items: flex-start; font-size: 14px; color: #8d8d93;
+    line-height: 1.55; margin-bottom: 14px; font-family: 'Inter', system-ui, sans-serif; letter-spacing: 0;
+    text-transform: none; cursor: pointer; }
+  .enq__check b { color: #e8cf94; font-weight: 500; }
+  .enq__check input { width: 20px; height: 20px; min-height: 0; padding: 0; flex: 0 0 20px;
+    accent-color: #d7b978; margin-top: 2px; }
+
   .enq__status { font-size: 14px; min-height: 1.2em; margin: 2px 0 0; }
   .enq__status[data-ok="0"] { color: #f0a0a0; }
   .enq__status[data-ok="1"] { color: #f1dda9; }
-  @media (max-width: 960px) { .enq__grid { grid-template-columns: 1fr; gap: 48px; } }
-  @media (max-width: 560px) { .enq__row { grid-template-columns: 1fr; } }
+
+  @media (max-width: 960px) { .enq__grid { grid-template-columns: 1fr; gap: 48px; } .enq__intro { position: static; } }
+  @media (max-width: 620px) { .enq__card { padding: 28px 22px; } .enq__row { grid-template-columns: 1fr; } }
 </style>

@@ -3,6 +3,7 @@ import { site, coach, faqs } from '../data/site';
 import Packages from '../components/Packages.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
 const title = site.title;
 const description = site.description;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -352,7 +353,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     </ul>
     <div class="nav__r">
       <a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>      <a class="ul" href="./admin">Admin</a>
-      <a class="btn btn--sm magnetic" href="./contact">Enquire</a>
+      <a class="btn btn--sm magnetic" href="#contact">Enquire</a>
     </div>
   </div>
 </header>
@@ -368,7 +369,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     </h1>
     <p class="hero__sub rv">One-to-one personal training in Enfield. Programmed for you, measured every session, and coached by one person who knows your name.</p>
     <div class="hero__cta rv">
-      <a class="btn magnetic" href="./contact">Book a free consultation</a>
+      <a class="btn magnetic" href="#contact">Book a free consultation</a>
       <a class="btn btn--ghost magnetic" href="#packages">See the packages</a>
     </div>
   </div>
@@ -505,7 +506,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     <div class="coachline rv"><span>Since <b>2016</b></span><i></i><span><b>10,000+</b> sessions</span><i></i><span><b>Level 3</b> PT</span></div>
     <div class="hero__cta rv" style="margin-top:34px">
       <button class="btn btn--ghost magnetic" type="button" id="open-bio">Read my story</button>
-      <a class="btn magnetic" href="./contact">Book a free consultation</a>
+      <a class="btn magnetic" href="#contact">Book a free consultation</a>
     </div>
   </div>
 </div>
@@ -578,7 +579,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     <span class="eyebrow rv">Get started</span>
     <h2 class="split-h" style="margin-top:22px">Book a free consultation.</h2>
     <p class="lede rv">No charge, no obligation, no pressure. Tell me what you want to change and I will tell you honestly whether I can help.</p>
-    <a class="btn magnetic rv" href="./contact">Book a free consultation</a>
+    <a class="btn magnetic rv" href="#contact">Book a free consultation</a>
   </div>
 </section>
 
@@ -597,11 +598,12 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     <h4>Qualifications</h4>
     <ul class="bio__creds">{coach.qualifications.map((q) => <li>{q}</li>)}</ul>
     <p class="fine">I specialise in: {coach.specialisms.join(' · ')}</p>
-    <div class="bio__cta"><a class="btn btn--sm magnetic" href="./contact" data-close>Book a free consultation</a></div>
+    <div class="bio__cta"><a class="btn btn--sm magnetic" href="#contact" data-close>Book a free consultation</a></div>
   </div>
 </div>
 
 <section class="band"><div class="wrap"><Faq /></div></section>
+<EnquiryForm />
 
 <footer>
   <div class="wrap">
@@ -612,7 +614,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
       </div>
       <div><h5>Coaching</h5><ul><li><a class="ul" href="#packages">Personal training</a></li><li><a class="ul" href="#method">The method</a></li><li><a class="ul" href="#packages">Packages</a></li><li><a class="ul" href="#packages">Duo</a></li></ul></div>
       <div><h5>More</h5><ul><li><a class="ul" href="#coach">Your coach</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">The app</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>      <a class="ul" href="./admin">Admin</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href="./contact">Book a consultation</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href="#contact">Book a consultation</a></li></ul></div>
     </div>
     <div class="foot__bar"><span>© 2026 PTPN</span><span>Bush Hill Park, Enfield, London</span></div>
   </div>

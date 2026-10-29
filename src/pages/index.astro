@@ -295,6 +295,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 @media (max-width:560px){.bio__card{padding:32px 24px}.bio__creds{grid-template-columns:1fr}}
 @media (max-width:1080px){
   :root{--gut:22px}
+  .eyebrow{font-size:13.5px;letter-spacing:.16em}
   .nav ul{display:none}
   .nav__r a.ul{display:none}
   .nav__r{gap:12px}
@@ -346,7 +347,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 
 <header id="hdr">
   <div class="wrap nav">
-    <img src="./brand/ptpn-lockup-520.png" alt="PTPN">
+    <a href="#" data-top aria-label="PTPN — back to top"><img src="./brand/ptpn-lockup-520.png" alt="PTPN"></a>
     <ul>
       <li><a class="ul" href="#packages">Personal training</a></li>
       <li><a class="ul" href="#method">The method</a></li>
@@ -611,7 +612,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   <div class="wrap">
     <div class="foot">
       <div>
-        <img src="./brand/ptpn-lockup-520.png" alt="PTPN">
+        <a href="#" data-top aria-label="PTPN — back to top"><img src="./brand/ptpn-lockup-520.png" alt="PTPN"></a>
         <p>One-to-one personal training in Bush Hill Park, Enfield. Programmed for you, measured every session.</p>
       </div>
       <div><h5>Coaching</h5><ul><li><a class="ul" href="#packages">Personal training</a></li><li><a class="ul" href="#method">The method</a></li><li><a class="ul" href="#packages">Packages</a></li><li><a class="ul" href="#packages">Duo</a></li></ul></div>
@@ -990,6 +991,18 @@ import Lenis from 'lenis';
   openBtn && openBtn.addEventListener('click', function(){ show(true); });
   modal.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click', function(){ show(false); }); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.classList.contains('open')) show(false); });
+})();
+</script>
+
+<script is:inline>
+(function(){
+  document.querySelectorAll('[data-top]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
 })();
 </script>
 </body>

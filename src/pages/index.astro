@@ -329,6 +329,7 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 
 .pkg-band{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:104px 0}
 </style>
+<noscript><style>.rv{opacity:1;transform:none}.mask>.ln{transform:none}.split__media img{clip-path:inset(0)}</style></noscript>
 </head>
 <body>
 
@@ -620,10 +621,10 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var doc = document.documentElement;
@@ -640,14 +641,14 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     var i0 = document.getElementById('intro'); if (i0) i0.style.display='none';
     document.body.classList.remove('locked');
   }
-  if (!window.gsap || !window.ScrollTrigger) { staticFallback(); return; }
+  // libraries bundled — no CDN dependency
   if (reduce) doc.classList.add('no-motion');
 
   gsap.registerPlugin(ScrollTrigger);
 
   /* ---------- smooth scroll ---------- */
   var lenis = null;
-  if (window.Lenis && !reduce) {
+  if (!reduce) {
     lenis = new Lenis({ duration:1.05, smoothWheel:true, lerp:0.09 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function(t){ lenis.raf(t*1000); });
@@ -798,9 +799,6 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 })();
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -818,14 +816,14 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
     var i0 = document.getElementById('intro'); if (i0) i0.style.display='none';
     document.body.classList.remove('locked');
   }
-  if (!window.gsap || !window.ScrollTrigger) { staticFallback(); return; }
+  // libraries bundled — no CDN dependency
   if (reduce) doc.classList.add('no-motion');
 
   gsap.registerPlugin(ScrollTrigger);
 
   /* ---------- smooth scroll ---------- */
   var lenis = null;
-  if (window.Lenis && !reduce) {
+  if (!reduce) {
     lenis = new Lenis({ duration:1.05, smoothWheel:true, lerp:0.09 });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function(t){ lenis.raf(t*1000); });

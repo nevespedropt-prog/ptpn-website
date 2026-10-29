@@ -29,7 +29,7 @@ section{padding-block:104px}.section-head{max-width:740px;margin-bottom:58px}.se
 .btn--ghost{border-color:rgba(215,185,120,.55);color:var(--ink);background:transparent}.btn--ghost:hover{border-color:var(--gold);color:var(--gold-light);background:rgba(215,185,120,.1)}
 .btn--block{width:100%}.btn--sm{min-height:44px;padding-inline:22px;font-size:14px}
 label{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:9px}
-input,select,textarea{width:100%;background:#131313;border:1px solid var(--line-2);color:var(--ink);padding:15px 16px;font-size:16px;min-height:52px;border-radius:2px}
+input,select,textarea{width:100%;background:#0f0f12;border:1px solid var(--line-2);color:var(--ink);padding:15px 16px;font-size:16px;min-height:52px;border-radius:2px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold-deep)}textarea{min-height:118px;resize:vertical}
 .fine{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em}
 .grain{position:fixed;inset:0;z-index:95;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -39,3 +39,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold-dee
 .skip:focus{left:12px;top:12px}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media(max-width:700px){:root{--gutter:22px}section{padding-block:72px}.lede{font-size:17.5px}}
+
+select {
+  appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23d7b978' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center; padding-right: 42px;
+}
+textarea { padding: 14px 16px; }
+option { background: #0f0f12; color: #f4f1ea; }

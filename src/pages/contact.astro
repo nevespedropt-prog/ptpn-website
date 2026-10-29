@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { site } from '../data/site';
+---
+<Base title={`Free consultation — ${site.name}`} description="Book a free, no-obligation consultation with Pedro.">
+  <EnquiryForm />
+  <Faq />
+</Base>

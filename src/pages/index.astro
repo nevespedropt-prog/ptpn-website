@@ -25,11 +25,15 @@ const ogImage = new URL('/images/hero-seated.jpg', Astro.site).href;
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
 <meta name="theme-color" content="#08080a" />
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context":"https://schema.org","@type":"HealthAndBeautyBusiness",
       "@id": site.url + "/#business", name:"PTPN Personal Training", alternateName:"PTPN Be fit",
-      url: site.url, email: site.email, description: site.description,
+      url: site.url, email: site.email, telephone: site.phoneTel, sameAs: [site.instagram, site.facebook], description: site.description,
       image: ogImage, priceRange:"£32.50-£54 per session", currenciesAccepted:"GBP", paymentAccepted:"Cash, Bank transfer",
       slogan:"Be fit", areaServed:{"@type":"Place", name:"Bush Hill Park, Enfield, London"},
       employee:{"@type":"Person", name:"Pedro", jobTitle:"Personal Trainer", worksFor:{"@id": site.url + "/#business"}},
@@ -326,6 +330,8 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   .drawer .dl{font-family:var(--serif);font-size:32px;line-height:1.2;color:var(--ink);padding:12px 24px;text-align:center}
   .drawer .dl--sub{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:10px}
   .drawer .btn{margin-top:26px}
+  .drawer__social{display:flex;gap:22px;margin-top:28px}
+  .drawer__social a{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);padding:10px 4px}
   .drawer__x{position:absolute;top:18px;right:14px;width:44px;height:44px;background:none;border:0;cursor:pointer}
   .drawer__x i{position:absolute;left:10px;top:21px;width:24px;height:1.5px;background:var(--ink);transform:rotate(45deg)}
   .drawer__x i+i{transform:rotate(-45deg)}
@@ -371,9 +377,11 @@ footer li{margin:0}
 @media (max-width:760px){.btn--sm{padding:14px 18px}}
 .mbar{display:none}
 @media (max-width:760px){
-  .mbar{display:block;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:70;text-align:center;
-    background:var(--gold);color:#0b0a06;font-weight:600;font-size:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.6);
+  .mbar{display:flex;gap:8px;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:70;
     transition:transform .35s var(--ease),opacity .35s var(--ease)}
+  .mbar a{display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;padding:16px 8px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+  .mbar__book{flex:1;background:var(--gold);color:#0b0a06}
+  .mbar__wa{flex:0 0 auto;background:#0d0d11;color:var(--gold-light);border:1px solid rgba(215,185,120,.55);padding-inline:12px}
   .mbar.hide{transform:translateY(140%);opacity:0;pointer-events:none}
   footer{padding-bottom:84px}
 }
@@ -388,7 +396,7 @@ footer li{margin:0}
   <div class="intro__bar" id="introBar"></div>
 </div>
 <div class="grain"></div>
-<a class="mbar" href="#contact">Book a free consultation</a>
+<div class="mbar"><a class="mbar__book" href="#contact">Book a free consultation</a><a class="mbar__wa" href={site.whatsapp} rel="noopener">WhatsApp</a></div>
 <div class="cur" id="cur"></div>
 <div class="cur-d" id="curD"></div>
 <div class="prog" id="prog"></div>
@@ -418,6 +426,7 @@ footer li{margin:0}
   <a class="dl" href="#results">Results</a>
   <a class="dl dl--sub" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>
   <a class="btn" href="#contact">Book a free consultation</a>
+  <div class="drawer__social"><a href={site.whatsapp} rel="noopener">WhatsApp</a><a href={site.instagram} rel="noopener">Instagram</a><a href={site.facebook} rel="noopener">Facebook</a></div>
 </div>
 
 <!-- ================= HERO ================= -->
@@ -624,7 +633,7 @@ footer li{margin:0}
       </div>
       <div><h5>Coaching</h5><ul><li><a class="ul" href="#packages">Personal training</a></li><li><a class="ul" href="#method">The method</a></li><li><a class="ul" href="#packages">Packages</a></li><li><a class="ul" href="#packages">Duo</a></li></ul></div>
       <div><h5>More</h5><ul><li><a class="ul" href="#coach">Your coach</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">The app</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a></li><li><a class="ul" href="./admin">Admin</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href="#contact">Book a free consultation</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a class="ul" href={`tel:${site.phoneTel}`}>{site.phone}</a></li><li><a class="ul" href={site.whatsapp} rel="noopener">WhatsApp</a></li><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href={site.instagram} rel="noopener">Instagram</a></li><li><a class="ul" href={site.facebook} rel="noopener">Facebook</a></li><li><a class="ul" href="#contact">Book a free consultation</a></li></ul></div>
     </div>
     <div class="foot__bar"><span>© 2026 PTPN</span><span>Bush Hill Park, Enfield, London</span></div>
   </div>

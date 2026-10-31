@@ -24,7 +24,11 @@ const year = new Date().getFullYear();
       <div>
         <h2 class="ftr__h">Contact</h2>
         <ul>
+          <li><a href={`tel:${site.phoneTel}`}>{site.phone}</a></li>
+          <li><a href={site.whatsapp} rel="noopener">WhatsApp</a></li>
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={site.instagram} rel="noopener">Instagram</a></li>
+          <li><a href={site.facebook} rel="noopener">Facebook</a></li>
           <li><a href="../#contact">Free consultation</a></li>
           <li>{site.area}</li>
         </ul>

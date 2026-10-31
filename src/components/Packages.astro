@@ -312,12 +312,17 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
       -webkit-overflow-scrolling: touch;
       padding-bottom: 10px;
     }
-    .pkg__card { flex: 0 0 84%; scroll-snap-align: start; }
+    .pkg__card { flex: 0 0 84%; scroll-snap-align: center; text-align: center; }
+    .pkg__card ul { justify-items: center; }
+    .pkg__card li { padding-left: 0; }
+    .pkg__card li::before { position: static; display: inline-block; margin-right: 10px; vertical-align: middle; }
+    .pkg__swipe { text-align: center; }
     .pkg__swipe { display: block; }
   }
 
   @media (max-width: 640px) {
-    .pkg__duo { padding: 24px 22px; gap: 18px; }
+    .pkg__duo { padding: 28px 22px; gap: 14px; justify-content: center; text-align: center; }
+    .pkg__duo p { margin-inline: auto; }
     .pkg__duo-price { margin-left: 0 !important; }
   }
 </style>

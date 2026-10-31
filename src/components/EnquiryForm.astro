@@ -166,7 +166,7 @@ const options = [
       marketing: mcContent || mcOffers, message: fullMsg,
     });
     if (error) {
-      say(error.message || 'Something went wrong. Please try again or email info@ptpn.co.uk directly.', false);
+      say('Sorry, that did not send. Please try again, or email info@ptpn.co.uk directly.', false);
       if (btn) { btn.disabled = false; btn.textContent = 'Send enquiry'; }
       return;
     }

@@ -1,31 +1,33 @@
 ---
 import Base from '../../layouts/Base.astro';
-const topics = [
-  ['Getting started after years off', 'What a sensible first 12 weeks actually looks like when you have not trained properly in a long time.'],
-  ['Knees, backs and other opinions', 'How to train with the things people say you should stop doing, and when to genuinely stop.'],
-  ['Fat loss without misery', 'Why adherence beats the diet of the month, and what that looks like week to week.'],
-  ['Strength for normal people', 'What to expect from a bar, a kettlebell, or your own body at 40, 50 and beyond.'],
-];
+import { posts } from '../../data/posts';
+const fmt = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
-<Base title="Blog | PTPN">
+<Base title="Blog | PTPN" description="Straight answers on training, fat loss and getting started again, from Pedro, a personal trainer in Enfield.">
   <section style="padding-block:96px 40px"><div class="wrap">
     <span class="eyebrow">Journal</span>
     <h1 style="margin-top:18px;font-size:clamp(34px,4.6vw,56px)">Training and nutrition, explained.</h1>
-    <p class="lede" style="margin-top:18px">Straight answers, written between sessions. The first posts are on the way, they will all be things clients have actually asked.</p>
+    <p class="lede" style="margin-top:18px">Straight answers, written between sessions. Each one covers something clients have actually asked.</p>
   </div></section>
   <section style="padding-block:0 110px"><div class="wrap">
     <div class="blog-grid">
-      {topics.map(([h, p]) => (
-        <article><h2>{h}</h2><p>{p}</p><span class="mono">Coming soon</span></article>
+      {posts.map((p) => (
+        <article>
+          <h2><a href={`./${p.slug}/`}>{p.title}</a></h2>
+          <p>{p.summary}</p>
+          <span class="mono">{fmt(p.date)} · {p.minutes} min read</span>
+        </article>
       ))}
     </div>
   </div></section>
 </Base>
 <style>
   .blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  .blog-grid article{border:1px solid var(--line);background:var(--card);padding:34px 30px;display:flex;flex-direction:column;gap:12px}
+  .blog-grid article{border:1px solid var(--line);background:var(--card);padding:34px 30px;display:flex;flex-direction:column;gap:12px;position:relative}
   .blog-grid h2{font-size:22px;letter-spacing:-.015em}
+  .blog-grid h2 a::after{content:"";position:absolute;inset:0}
   .blog-grid p{color:var(--muted);font-size:15.5px;line-height:1.65;flex:1}
-  .blog-grid .mono{color:var(--faint)}
+  .blog-grid .mono{color:var(--faint);font-size:12px}
+  .blog-grid article:hover{border-color:var(--gold-deep)}
   @media (max-width:760px){.blog-grid{grid-template-columns:1fr}}
 </style>

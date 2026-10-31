@@ -333,6 +333,14 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
 footer .ul,header .ul{display:inline-block;padding:10px 0}
 footer li{margin:0}
 @media (max-width:760px){.btn--sm{padding:14px 18px}}
+.mbar{display:none}
+@media (max-width:760px){
+  .mbar{display:block;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:70;text-align:center;
+    background:var(--gold);color:#0b0a06;font-weight:600;font-size:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.6);
+    transition:transform .35s var(--ease),opacity .35s var(--ease)}
+  .mbar.hide{transform:translateY(140%);opacity:0;pointer-events:none}
+  footer{padding-bottom:84px}
+}
 </style>
 <noscript><style>.rv{opacity:1;transform:none}.mask>.ln{transform:none}.split__media img{clip-path:inset(0)}</style></noscript>
 </head>
@@ -344,6 +352,7 @@ footer li{margin:0}
   <div class="intro__bar" id="introBar"></div>
 </div>
 <div class="grain"></div>
+<a class="mbar" href="#contact">Book a free consultation</a>
 <div class="cur" id="cur"></div>
 <div class="cur-d" id="curD"></div>
 <div class="prog" id="prog"></div>
@@ -749,6 +758,16 @@ import Lenis from 'lenis';
     scrollTrigger:{ trigger:'.split', start:'top 78%', once:true } });
   gsap.fromTo('#coachImg', { yPercent:-6 }, { yPercent:6, ease:'none',
     scrollTrigger:{ trigger:'.split', start:'top bottom', end:'bottom top', scrub:true } });
+
+  /* phone booking bar: out of the way while the hero or the form is on screen */
+  var mbar = document.querySelector('.mbar'), seen = { hero:false, form:false };
+  if (mbar && 'IntersectionObserver' in window){
+    var sync = function(){ mbar.classList.toggle('hide', seen.hero || seen.form); };
+    [['.hero','hero'],['#contact','form']].forEach(function(pair){
+      var el = document.querySelector(pair[0]); if (!el) return;
+      new IntersectionObserver(function(e){ seen[pair[1]] = e[0].isIntersecting; sync(); }, { threshold:0.1 }).observe(el);
+    });
+  }
 
   window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
   window.addEventListener('resize', function(){ ScrollTrigger.refresh(); });

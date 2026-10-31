@@ -59,6 +59,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
     </div>
 
     <!-- phone: stacked cards, because a pricing table should never scroll sideways -->
+    <p class="pkg__swipe">Swipe to compare packages</p>
     <div class="pkg__cards">
       {order.map((name) => {
         const p = packages.find((x) => x.name === name)!;
@@ -192,6 +193,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
 
   /* phone cards */
   .pkg__cards { display: none; }
+  .pkg__swipe { display: none; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
 
   .pkg__card {
     background: var(--card);
@@ -302,7 +304,16 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
 
   @media (max-width: 880px) {
     .pkg__table-wrap { display: none; }
-    .pkg__cards { display: grid; gap: 14px; }
+    .pkg__cards {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 10px;
+    }
+    .pkg__card { flex: 0 0 84%; scroll-snap-align: start; }
+    .pkg__swipe { display: block; }
   }
 
   @media (max-width: 640px) {

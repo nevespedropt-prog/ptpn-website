@@ -107,7 +107,7 @@ export const packages: Pkg[] = [
 
 export const duo = {
   name: 'Duo',
-  price: 60,
+  price: 100,
   period: 'month',
   tagline: 'Small group personal training',
   detail: 'Train with a partner or a friend. Minimum two people, minimum one session a week.',
@@ -165,7 +165,7 @@ export const testimonials = [
 export const faqs = [
   {
     q: 'How much does personal training cost?',
-    a: 'Packages start at £32.50 a session for Express, a twelve-session 30-minute pack. The one-hour packs are Ignition at £54 a session for four sessions, Momentum at £48 for eight, and Signature at £40 for twelve. Duo, the small group option, is £60 a month for a minimum of two people training at least once a week. All prices are per session and paid in person.',
+    a: 'Packages start at £32.50 a session for Express, a twelve-session 30-minute pack. The one-hour packs are Ignition at £54 a session for four sessions, Momentum at £48 for eight, and Signature at £40 for twelve. Duo, the small group option, is £100 a month for a minimum of two people training at least once a week. All prices are per session and paid in person.',
   },
   {
     q: 'Is the first session free?',

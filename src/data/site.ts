@@ -9,7 +9,7 @@ export const site = {
   appPath: 'https://nevespedropt-prog.github.io/PTPN/',
   area: 'Bush Hill Park, Enfield, London',
   areaShort: 'Enfield',
-  title: 'PTPN — Personal Training in Enfield | Be fit',
+  title: 'PTPN | Personal Training in Enfield | Be fit',
   description:
     'One-to-one personal training in Enfield. Programmed for you, measured every session, with your plan and progress in your own coaching app. Packages from £32.50 a session.',
   // Set to the real business address before launch if it should appear publicly.
@@ -128,15 +128,27 @@ export const testimonials = [
     context:
       'For me it was my first ever time working out, at the age of 55 with dodgy knees.',
     name: 'Neil Purcell',
-    meta: 'Google review · 5 stars',
+    meta: 'Google review',
+    stars: 5,
     lead: true,
   },
   {
     quote:
-      'The trainers are incredibly knowledgeable and supportive, always pushing me to reach my goals while ensuring I stay safe and motivated.',
+      'I can honestly say Pedro is the best trainer I have ever worked with. He helped me feel more comfortable and confident at the gym.',
     context: null,
-    name: 'Fateh Singh',
-    meta: 'Google review · 5 stars',
+    name: 'Diana',
+    meta: 'Client · Greece',
+    stars: 5,
+    lead: false,
+    edited: true,
+  },
+  {
+    quote:
+      "After 3 months of committing to healthier eating habits, regular exercise, and stress management techniques, I've shed 30 pounds, regained confidence, and found a newfound sense of vitality.",
+    context: null,
+    name: 'Anna',
+    meta: 'Client · England',
+    stars: 5,
     lead: false,
   },
   {

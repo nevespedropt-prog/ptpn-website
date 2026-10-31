@@ -315,11 +315,30 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   .hero__scroll{display:none}
   .stack{padding-bottom:0}
   .btn .lg{display:none}
+  body.past-hero .nav__r .btn{display:none}
   .btn .sm{display:inline}
   .nav .btn--sm{padding:12px 14px;font-size:14px}
   .wrap .wrap{padding-left:0;padding-right:0}
-  .coachline{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:0 18px}
+  /* centre the copy on phones, with a comfortable edge gap */
+  :root{--gut:24px}
+  section:not(.enq):not(.faq),footer{text-align:center}
+  .eyebrow{justify-content:center;text-align:center;letter-spacing:.12em}
+  .eyebrow::before{display:none}
+  .hero__in{align-items:center;text-align:center}
+  .hero__cta{justify-content:center}
+  .stats div{text-align:center}
+  .stats span{margin-inline:auto}
+  .lede,.split__copy p,.statement p{margin-inline:auto}
+  .mrow{grid-template-columns:1fr;gap:10px;text-align:center}
+  .mrow p{grid-column:1;margin-inline:auto;max-width:38ch}
+  .mrow:hover{padding-left:0}
+  .coachline{justify-content:center;display:flex;flex-wrap:wrap;gap:8px 18px}
   .coachline i{display:none}
+  .split__copy .btn,.split__copy .bio__more{margin-inline:auto}
+  .foot{grid-template-columns:1fr;gap:34px;justify-items:center}
+  .foot img{margin-inline:auto}
+  .foot p{margin-inline:auto}
+  .foot__bar{flex-direction:column;gap:8px;align-items:center;text-align:center}
   .step{background:radial-gradient(ellipse 90% 34% at 50% 50%,rgba(8,8,10,.78),rgba(8,8,10,0))}
   .phone{opacity:.3}
 }
@@ -449,7 +468,7 @@ footer li{margin:0}
           <div class="sface" data-face="1">
             <div class="sface__top"><span>Session 12</span><span class="schip"><i></i>Logged</span></div>
             <h4>Romanian deadlift</h4>
-            <div class="big">102.5 <small>kg</small></div>
+            <div class="big"><span data-count="102.5" data-dec="1">102.5</span> <small>kg</small></div>
             <div class="srows" style="margin-top:18px">
               <div><span>Set 1</span><b>100 × 8</b></div>
               <div><span>Set 2</span><b>102.5 × 8</b></div>
@@ -460,7 +479,7 @@ footer li{margin:0}
           <div class="sface" data-face="2">
             <div class="sface__top"><span>Progress</span><span class="schip"><i></i>12 weeks</span></div>
             <h4>Your numbers</h4>
-            <div class="big">−11.2 <small>kg</small></div>
+            <div class="big"><span data-count="-11.2" data-dec="1">−11.2</span> <small>kg</small></div>
             <div class="sbars" style="margin-top:22px">
               <div><div class="lbl"><span>Strength</span><span>+42.5 kg</span></div><div class="t"><i data-w="82"></i></div></div>
               <div><div class="lbl"><span>Body composition</span><span>−6.4%</span></div><div class="t"><i data-w="64"></i></div></div>
@@ -474,7 +493,7 @@ footer li{margin:0}
           <div class="sface" data-face="3">
             <div class="sface__top"><span>Nutrition</span><span class="schip"><i></i>On target</span></div>
             <h4>Today</h4>
-            <div class="big">142 <small>/ 180 g protein</small></div>
+            <div class="big"><span data-count="142">142</span> <small>/ 180 g protein</small></div>
             <div class="sbars" style="margin-top:22px">
               <div><div class="lbl"><span>Protein</span><span>142 g</span></div><div class="t"><i data-w="79"></i></div></div>
               <div><div class="lbl"><span>Calories</span><span>1,840</span></div><div class="t"><i data-w="71"></i></div></div>
@@ -519,7 +538,7 @@ footer li{margin:0}
     <h2 class="split-h" style="margin-top:20px">{coach.headline}</h2>
     <p class="rv">An ex-basketball player, coaching since 2016 and in the industry for over ten years. More than 10,000 sessions and classes delivered, and a specialism in the people everyone else writes off, bad knees, bad backs, and a long time away from it.</p>
     <p class="rv">You get a training plan, nutrition targets and goal setting. My attention to detail and your commitment are the ingredients, and I coach you every step of the way.</p>
-    <div class="coachline rv"><span>Since <b>2016</b></span><i></i><span><b>10,000+</b> sessions</span><i></i><span><b>Level 3</b> PT</span></div>
+    <div class="coachline rv"><span>Since <b data-count="2016" data-from="2000" data-plain>2016</b></span><i></i><span><b data-count="10000" data-suffix="+">10,000+</b> sessions</span><i></i><span><b>Level 3</b> PT</span></div>
     <div class="hero__cta rv" style="margin-top:34px">
       <button class="btn btn--ghost magnetic" type="button" id="open-bio">Read my story</button>
       <a class="btn magnetic" href="#contact">Book a free consultation</a>
@@ -543,16 +562,6 @@ footer li{margin:0}
       <div class="mrow rv"><span class="mn">03</span><h3>Train and log</h3><p>We train, you log it in the app. Every set, every load, every session. I see it before you walk in next time.</p></div>
       <div class="mrow rv"><span class="mn">04</span><h3>Review and adjust</h3><p>We look at the numbers together and change the plan when the plan needs changing, not on a fixed schedule, but when the data says so.</p></div>
     </div>
-  </div>
-</section>
-
-<!-- ================= CTA ================= -->
-<section class="cta">
-  <div class="wrap">
-    <span class="eyebrow rv">Get started</span>
-    <h2 class="split-h" style="margin-top:22px">Book a free consultation.</h2>
-    <p class="lede rv">No charge, no obligation, no pressure. Tell me what you want to change and I will tell you honestly whether I can help.</p>
-    <a class="btn magnetic rv" href="#contact">Book a free consultation</a>
   </div>
 </section>
 
@@ -601,14 +610,23 @@ import Lenis from 'lenis';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var doc = document.documentElement;
 
+  /* count a number up (or down) to data-count; handles decimals, a start value, a suffix and a minus sign */
+  function fmtCount(el, v){
+    var dec = parseInt(el.dataset.dec || '0', 10);
+    var txt = Math.abs(v).toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec, useGrouping: !el.hasAttribute('data-plain') });
+    el.textContent = (v < 0 ? '\u2212' : '') + txt + (el.dataset.suffix || '');
+  }
+  function countUp(el, dur){
+    var to = parseFloat(el.dataset.count), o = { v: parseFloat(el.dataset.from || '0') };
+    gsap.to(o, { v: to, duration: dur || 1.7, ease: 'power2.out', overwrite: true, onUpdate: function(){ fmtCount(el, o.v); } });
+  }
+
   function staticFallback(){
     doc.classList.add('gsap-fail');
     document.querySelectorAll('.mask > .ln').forEach(function(s){ s.style.transform='none'; });
     document.querySelectorAll('.rv').forEach(function(s){ s.style.opacity=1; s.style.transform='none'; });
     document.querySelectorAll('.sbars .t i').forEach(function(b){ b.style.width=b.dataset.w+'%'; });
-    document.querySelectorAll('[data-count]').forEach(function(n){
-      n.textContent = parseFloat(n.dataset.count).toLocaleString('en-GB') + (n.dataset.suffix||'');
-    });
+    document.querySelectorAll('[data-count]').forEach(function(n){ fmtCount(n, parseFloat(n.dataset.count)); });
     document.querySelectorAll('.split__media img').forEach(function(i){ i.style.clipPath='inset(0)'; });
     var i0 = document.getElementById('intro'); if (i0) i0.style.display='none';
     document.body.classList.remove('locked');
@@ -728,19 +746,21 @@ import Lenis from 'lenis';
   });
 
   /* ---------- count-ups ---------- */
-  gsap.utils.toArray('[data-count]').forEach(function(el){
-    var target = parseFloat(el.dataset.count), sfx = el.dataset.suffix||'', o = {v:0};
-    gsap.to(o, { v:target, duration:1.7, ease:'power2.out',
-      scrollTrigger:{ trigger:el, start:'top 88%', once:true },
-      onUpdate:function(){ el.textContent = Math.round(o.v).toLocaleString('en-GB') + sfx; } });
+  gsap.utils.toArray('[data-count]').filter(function(el){ return !el.closest('.sface'); }).forEach(function(el){
+    el.textContent = '0';
+    fmtCount(el, parseFloat(el.dataset.from || '0'));
+    ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: function(){ countUp(el, 1.7); } });
   });
 
   /* ---------- PINNED APP: CSS sticky does the pinning, ScrollTrigger just reports ---------- */
   var steps = gsap.utils.toArray('.step'), faces = gsap.utils.toArray('.sface');
+  var lastFace = null;
   function activate(i){
     steps.forEach(function(s,k){ s.classList.toggle('active', k===i); });
     faces.forEach(function(f,k){ f.classList.toggle('on', k===i); });
     var f = faces[i];
+    if (f && f !== lastFace){ f.querySelectorAll('[data-count]').forEach(function(n){ countUp(n, 1.3); }); }
+    lastFace = f;
     if (f) f.querySelectorAll('.t i').forEach(function(b){ b.style.width = b.dataset.w + '%'; });
   }
   activate(0);
@@ -762,7 +782,7 @@ import Lenis from 'lenis';
   /* phone booking bar: out of the way while the hero or the form is on screen */
   var mbar = document.querySelector('.mbar'), seen = { hero:false, form:false };
   if (mbar && 'IntersectionObserver' in window){
-    var sync = function(){ mbar.classList.toggle('hide', seen.hero || seen.form); };
+    var sync = function(){ mbar.classList.toggle('hide', seen.hero || seen.form); document.body.classList.toggle('past-hero', !seen.hero); };
     [['.hero','hero'],['#contact','form']].forEach(function(pair){
       var el = document.querySelector(pair[0]); if (!el) return;
       new IntersectionObserver(function(e){ seen[pair[1]] = e[0].isIntersecting; sync(); }, { threshold:0.1 }).observe(el);

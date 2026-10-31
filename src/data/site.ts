@@ -133,7 +133,7 @@ export const testimonials = [
     context:
       'For me it was my first ever time working out, at the age of 55 with dodgy knees.',
     name: 'Neil Purcell',
-    meta: 'Google review',
+    meta: 'England',
     stars: 5,
     lead: true,
   },
@@ -142,17 +142,16 @@ export const testimonials = [
       'I can honestly say Pedro is the best trainer I have ever worked with. He helped me feel more comfortable and confident at the gym.',
     context: null,
     name: 'Diana',
-    meta: 'Client · Greece',
+    meta: 'Greece',
     stars: 5,
     lead: false,
-    edited: true,
   },
   {
     quote:
       "After 3 months of committing to healthier eating habits, regular exercise, and stress management techniques, I've shed 30 pounds, regained confidence, and found a newfound sense of vitality.",
     context: null,
     name: 'Anna',
-    meta: 'Client · England',
+    meta: 'Cyprus',
     stars: 5,
     lead: false,
   },
@@ -161,10 +160,9 @@ export const testimonials = [
       'After 3 months I was able to perform exercises I never imagined I could perform. I gained 5kg of muscle mass and feel more energetic and active than ever.',
     context: 'Someone who had never been to a gym before.',
     name: 'Iuri da Costa',
-    meta: 'Client · cabin crew at easyJet',
+    meta: 'Spain',
     stars: 5,
     lead: false,
-    edited: true,
   },
 ];
 

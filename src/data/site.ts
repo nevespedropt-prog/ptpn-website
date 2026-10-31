@@ -157,6 +157,7 @@ export const testimonials = [
     context: 'Someone who had never been to a gym before.',
     name: 'Iuri da Costa',
     meta: 'Client · cabin crew at easyJet',
+    stars: 5,
     lead: false,
     edited: true,
   },

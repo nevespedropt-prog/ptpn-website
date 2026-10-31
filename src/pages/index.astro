@@ -111,6 +111,7 @@ h3{font-family:var(--serif);font-weight:600;font-size:clamp(21px,2vw,28px);line-
 header{position:fixed;top:0;left:0;right:0;z-index:80;transition:background .5s var(--ease),border-color .5s var(--ease)}
 header.solid{background:rgba(8,8,10,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:32px;height:80px}
+.burger,.drawer{display:none}
 .nav img{width:136px}
 .nav ul{display:flex;gap:34px;list-style:none}
 .nav ul a{font-size:14.5px;color:rgba(244,241,234,.9);transition:color .3s var(--ease)}
@@ -155,7 +156,7 @@ header.solid{background:rgba(8,8,10,.82);backdrop-filter:blur(16px);border-botto
 .pinned__track{position:relative}
 /* the phone is pinned for the whole section and the copy scrolls over it */
 .pinned__stage{position:sticky;top:0;height:100vh;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;pointer-events:none}
-.sample-note{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted,#8a8578);text-align:center;max-width:32ch}
+.sample-note{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);opacity:.7;text-align:center;max-width:40ch}
 .pinned__copy{position:relative;z-index:2;margin-top:-100vh;padding:0 22px 10vh}
 .step{min-height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
   opacity:.18;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
@@ -315,6 +316,19 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   .hero__scroll{display:none}
   .stack{padding-bottom:0}
   .btn .lg{display:none}
+  .nav{gap:8px}
+  .nav__r{margin-left:auto}
+  .burger{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:7px;width:44px;height:44px;margin-right:-10px;background:none;border:0;cursor:pointer;position:relative;z-index:2}
+  .burger i{display:block;width:24px;height:1.5px;background:var(--ink)}
+  .drawer{display:flex;position:fixed;inset:0;z-index:95;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    background:#08080a;opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility 0s .35s}
+  .drawer.open{opacity:1;visibility:visible;transition-delay:0s}
+  .drawer .dl{font-family:var(--serif);font-size:32px;line-height:1.2;color:var(--ink);padding:12px 24px;text-align:center}
+  .drawer .dl--sub{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+  .drawer .btn{margin-top:26px}
+  .drawer__x{position:absolute;top:18px;right:14px;width:44px;height:44px;background:none;border:0;cursor:pointer}
+  .drawer__x i{position:absolute;left:10px;top:21px;width:24px;height:1.5px;background:var(--ink);transform:rotate(45deg)}
+  .drawer__x i+i{transform:rotate(-45deg)}
   /* scrolling through the hero: the button slides off to the right and the logo glides to the centre */
   .nav>a{will-change:transform;transform:translateX(calc(var(--hp,0) * (50vw - var(--gut) - 59px)))}
   .nav__r{transform:translateX(calc(var(--hp,0) * 170%));opacity:calc(1 - var(--hp,0) * 1.5)}
@@ -392,8 +406,19 @@ footer li{margin:0}
       <a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>
       <a class="btn btn--sm magnetic" href="#contact"><span class="lg">Book a free consultation</span><span class="sm">Free consultation</span></a>
     </div>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><i></i><i></i></button>
   </div>
 </header>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <button class="drawer__x" type="button" aria-label="Close menu"><i></i><i></i></button>
+  <a class="dl" href="#packages">Personal training</a>
+  <a class="dl" href="#method">The method</a>
+  <a class="dl" href="#app">The app</a>
+  <a class="dl" href="#results">Results</a>
+  <a class="dl dl--sub" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>
+  <a class="btn" href="#contact">Book a free consultation</a>
+</div>
 
 <!-- ================= HERO ================= -->
 <section class="hero">
@@ -781,6 +806,22 @@ import Lenis from 'lenis';
     scrollTrigger:{ trigger:'.split', start:'top 78%', once:true } });
   gsap.fromTo('#coachImg', { yPercent:-6 }, { yPercent:6, ease:'none',
     scrollTrigger:{ trigger:'.split', start:'top bottom', end:'bottom top', scrub:true } });
+
+  /* phone menu */
+  var burger = document.querySelector('.burger'), drawer = document.getElementById('drawer');
+  function setMenu(open){
+    if (!drawer || !burger) return;
+    drawer.classList.toggle('open', open);
+    drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    doc.style.overflow = open ? 'hidden' : '';
+    if (lenis){ if (open) lenis.stop(); else lenis.start(); }
+  }
+  if (burger && drawer){
+    burger.addEventListener('click', function(){ setMenu(true); });
+    drawer.querySelectorAll('a, .drawer__x').forEach(function(el){ el.addEventListener('click', function(){ setMenu(false); }); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+  }
 
   /* header: progress through the hero drives --hp (0 at the top, 1 once the hero is gone) */
   ScrollTrigger.create({ trigger:'.hero', start:'top top', end:'bottom top+=90', onUpdate:function(self){

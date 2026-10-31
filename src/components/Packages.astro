@@ -2,7 +2,7 @@
 import { packages, duo, packageRows } from '../data/site';
 
 const gbp = (n: number) => (Number.isInteger(n) ? `£${n}` : `£${n.toFixed(2)}`);
-const order = ['Express', 'Ignition', 'Signature', 'Momentum'];
+const order = ['Express', 'Ignition', 'Momentum', 'Signature'];
 const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
 ---
 
@@ -40,10 +40,6 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
               </td>
             ))}
           </tr>
-          <tr>
-            <th scope="row">Session length</th>
-            {cols.map((p) => <td class={p.best ? 'is-best' : undefined}>{p.minutes} minutes</td>)}
-          </tr>
           {packageRows.map((row) => (
             <tr>
               <th scope="row">{row.label}</th>
@@ -75,7 +71,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
             <ul>
               {p.includes.map((i) => <li>{i}</li>)}
             </ul>
-            <a class={`btn ${p.best ? 'btn--primary' : 'btn--ghost'} btn--block`} href="#contact">Free consultation</a>
+            <a class={`btn ${p.best ? 'btn--primary' : 'btn--ghost'} btn--block`} href="#contact">Book a free consultation</a>
           </article>
         );
       })}
@@ -87,7 +83,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
         <p>{duo.detail}</p>
       </div>
       <p class="pkg__duo-price">{gbp(duo.price)} <small>/ {duo.period}</small></p>
-      <a class="btn btn--ghost" href="#contact">Free consultation</a>
+      <a class="btn btn--ghost" href="#contact">Book a free consultation</a>
     </div>
   </div>
 </section>
@@ -117,7 +113,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
   .pkg thead th {
     background: #141415;
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size:12px;
     letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--muted);
@@ -139,7 +135,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
 
   .pkg__len {
     display: block;
-    font-size: 10px;
+    font-size:12px;
     letter-spacing: .08em;
   }
 
@@ -176,7 +172,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
   .pkg__total {
     display: block;
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size:12px;
     color: var(--muted);
   }
 
@@ -185,7 +181,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
     background: var(--gold);
     color: #141414;
     font-family: var(--display);
-    font-size: 9.5px;
+    font-size:12px;
     font-weight: 800;
     letter-spacing: .12em;
     text-transform: uppercase;
@@ -218,7 +214,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
 
   .pkg__card-len {
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size:12px;
     letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--muted);
@@ -236,7 +232,7 @@ const cols = [...packages].sort((a, b) => order.indexOf(a.name) - order.indexOf(
 
   .pkg__card-total {
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size:12px;
     color: var(--muted);
     padding-bottom: 16px;
     border-bottom: 1px solid var(--line);

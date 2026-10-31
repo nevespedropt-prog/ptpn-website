@@ -4,21 +4,21 @@ import { packages, duo, site } from '../data/site';
 const goals = ['Lose fat', 'Build muscle', 'Improve my health', 'Strength & performance'];
 const freq = ['Once a week', '2–3 times a week', '4+ times a week'];
 const genders = ['Male', 'Female', 'Prefer not to say'];
-const countries = ['United Kingdom','Ireland','Netherlands','Belgium','France','Germany','Spain','Portugal','Other (in Europe)'];
+const gbp = (n: number) => (Number.isInteger(n) ? `£${n}` : `£${n.toFixed(2)}`);
 const options = [
   'Not sure yet, advise me',
-  ...packages.map((p) => `${p.name} · ${p.tagline} · £${p.perSession} each`),
-  `${duo.name} · small group · £${duo.price} per ${duo.period}`,
+  ...packages.map((p) => `${p.name} · ${p.tagline} · ${gbp(p.perSession)} each`),
+  `${duo.name} · small group · ${gbp(duo.price)} per ${duo.period}`,
 ];
 ---
 
 <section class="enq" id="contact">
   <div class="wrap">
-    <span class="eyebrow enq__eyebrow">Enquire</span>
+    <span class="eyebrow enq__eyebrow">Book a free consultation</span>
     
 
     <form class="enq__card" id="enquiry-form" novalidate>
-      {/* honeypot — bots fill it, humans don't */}
+      {/* honeypot, bots fill it, humans don't */}
       <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0" />
 
       <div class="enq__cols">
@@ -26,12 +26,8 @@ const options = [
       <h3 class="enq__sec">Enquiry details</h3>
       <div class="enq__row">
         <div>
-          <label for="country">I am based in</label>
-          <select id="country" name="country">{countries.map((o) => <option>{o}</option>)}</select>
-        </div>
-        <div>
-          <label for="location">Town / area <span class="enq__req">*</span></label>
-          <input id="location" name="location" type="text" required autocomplete="address-level2" placeholder="e.g. Enfield" />
+          <label for="location">Town / area (optional)</label>
+          <input id="location" name="location" type="text" autocomplete="address-level2" placeholder="e.g. Enfield" />
         </div>
       </div>
       <div>
@@ -110,7 +106,7 @@ const options = [
         <span><b>Offers and updates.</b> Occasional news on packages, Duo spots and challenges.</span>
       </label>
 
-      <button class="btn btn--primary btn--block" type="submit" id="enquiry-submit">Send enquiry</button>
+      <button class="btn btn--primary btn--block" type="submit" id="enquiry-submit">Book a free consultation</button>
       <p class="enq__status" id="enquiry-status" role="status" aria-live="polite"></p>
       <p class="fine">
         I reply to every enquiry personally, usually within one working day. Your details are only used
@@ -138,7 +134,6 @@ const options = [
     const lname = String(fd.get('lname') ?? '').trim();
     const email = String(fd.get('email') ?? '').trim();
     const phone = String(fd.get('phone') ?? '').trim();
-    const country = String(fd.get('country') ?? '').trim();
     const location = String(fd.get('location') ?? '').trim();
     const pkg = String(fd.get('package') ?? '').trim();
     const goal = String(fd.get('goal') ?? '').trim();
@@ -149,13 +144,12 @@ const options = [
     const message = String(fd.get('message') ?? '').trim();
     if (!fname || !lname) { say('Please enter your first and last name.', false); return; }
     if (!email || !email.includes('@')) { say('Please enter a valid email.', false); return; }
-    if (!location) { say('Please tell me your town or area.', false); return; }
     if (!goal) { say('Please pick your main goal.', false); return; }
     if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
     say('', true);
     const name = fname + ' ' + lname;
     const fullMsg = [
-      `Based in: ${country} / ${location}`,
+      location ? `Based in: ${location}` : '',
       message ? `Notes: ${message}` : '',
       mcContent ? 'Wants fitness content: yes' : '',
       mcOffers ? 'Wants offers/updates: yes' : '',
@@ -167,13 +161,13 @@ const options = [
     });
     if (error) {
       say('Sorry, that did not send. Please try again, or email info@ptpn.co.uk directly.', false);
-      if (btn) { btn.disabled = false; btn.textContent = 'Send enquiry'; }
+      if (btn) { btn.disabled = false; btn.textContent = 'Book a free consultation'; }
       return;
     }
     form.reset();
     if (btn) { btn.textContent = 'Sent ✓'; }
-    say('Thanks — your enquiry is with Pedro. He will reply within one working day.', true);
-    setTimeout(() => { if (btn) { btn.disabled = false; btn.textContent = 'Send enquiry'; } }, 2500);
+    say('Thanks, your enquiry is with Pedro. He will reply within one working day.', true);
+    setTimeout(() => { if (btn) { btn.disabled = false; btn.textContent = 'Book a free consultation'; } }, 2500);
   });
 </script>
 
@@ -183,14 +177,14 @@ const options = [
 
   .enq__card { background: #0d0d11; border: 1px solid rgba(255,255,255,.12); border-radius: 14px;
     padding: 40px 42px; display: grid; gap: 18px; }
-  .enq__sec { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500;
+  .enq__sec { font-family: 'IBM Plex Mono', monospace; font-size:12px; font-weight: 500;
     letter-spacing: .22em; text-transform: uppercase; color: #d7b978;
     padding-bottom: 12px; border-bottom: 1px solid rgba(215,185,120,.18); margin-top: 14px; }
   .enq__sec:first-child { margin-top: 0; }
   .enq__req { color: #d7b978; }
   .enq__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .enq__set { border: 0; padding: 0; margin: 0; }
-  .enq__set legend { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .18em;
+  .enq__set legend { font-family: 'IBM Plex Mono', monospace; font-size:12px; letter-spacing: .18em;
     text-transform: uppercase; color: #8d8d93; margin-bottom: 11px; padding: 0; }
   .enq__chips { display: flex; gap: 9px; flex-wrap: wrap; }
   .enq__chips--big .chip span { padding: 12px 22px; font-size: 14.5px; }

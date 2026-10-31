@@ -9,7 +9,7 @@ export const site = {
   appPath: 'https://nevespedropt-prog.github.io/PTPN/',
   area: 'Bush Hill Park, Enfield, London',
   areaShort: 'Enfield',
-  title: 'PTPN — Personal Training in Enfield | Be fit',
+  title: 'PTPN | Personal Training in Enfield | Be fit',
   description:
     'One-to-one personal training in Enfield. Programmed for you, measured every session, with your plan and progress in your own coaching app. Packages from £32.50 a session.',
   // Set to the real business address before launch if it should appear publicly.

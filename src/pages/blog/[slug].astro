@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import { posts } from '../../data/posts';
+import { site } from '../../data/site';
+export function getStaticPaths() {
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+const { post } = Astro.props;
+const fmt = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.title,
+  description: post.summary,
+  datePublished: post.date,
+  author: { '@type': 'Person', name: 'Pedro', url: site.url },
+  publisher: { '@type': 'Organization', name: site.name, url: site.url },
+}];
+---
+<Base title={`${post.title} | PTPN`} description={post.summary} schema={schema}>
+  <article style="padding-block:96px 72px"><div class="wrap" style="max-width:760px">
+    <a class="back" href="../">All posts</a>
+    <h1 style="margin-top:22px;font-size:clamp(32px,4.4vw,52px)">{post.title}</h1>
+    <p class="fine" style="margin-top:14px">By Pedro · {fmt(post.date)} · {post.minutes} min read</p>
+    <div class="post">
+      {post.body.map((b) => b.startsWith('## ') ? <h2>{b.slice(3)}</h2> : <p>{b}</p>)}
+    </div>
+    <div class="post-cta">
+      <h2>Book a free consultation</h2>
+      <p>No charge, no obligation. Tell me what you want to change and I will tell you honestly whether I can help.</p>
+      <a class="btn" href="../../#contact">Book a free consultation</a>
+    </div>
+  </div></article>
+</Base>
+<style>
+  .back{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:inline-block;padding:10px 0}
+  .post{margin-top:36px;color:var(--ink-2,#cfcbc2);font-size:17.5px;line-height:1.75}
+  .post p{margin:0 0 20px}
+  .post h2{font-size:24px;margin:40px 0 14px;letter-spacing:-.015em;color:var(--ink)}
+  .post-cta{margin-top:56px;border:1px solid var(--line);border-left:2px solid var(--gold);background:var(--card);padding:34px 32px}
+  .post-cta h2{font-size:24px}
+  .post-cta p{color:var(--muted);margin:12px 0 22px;line-height:1.65}
+</style>

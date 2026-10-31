@@ -168,8 +168,8 @@ export const faqs = [
     a: 'Packages start at £32.50 a session for Express, a twelve-session 30-minute pack. The one-hour packs are Ignition at £54 a session for four sessions, Momentum at £48 for eight, and Signature at £40 for twelve. Duo, the small group option, is £60 a month for a minimum of two people training at least once a week. All prices are per session and paid in person.',
   },
   {
-    q: 'Is the first session free?',
-    a: 'Yes. I offer a free consultation with no obligation. We talk through your goal, your training history and what has stopped you before, and you leave with a clear idea of what working together would look like. There is no charge and no pressure to book anything.',
+    q: 'What is free?',
+    a: 'The consultation is free. It is a conversation, not a training session. We talk through your goal, your training history and what has stopped you before, and you leave with a clear idea of what working together would look like. There is no charge and no pressure to book anything. The first training session is paid, and it starts with an assessment.',
   },
   {
     q: 'Do I need experience before I start?',
@@ -185,7 +185,7 @@ export const faqs = [
   },
   {
     q: 'Where do we train?',
-    a: 'In a private studio in Bush Hill Park, Enfield. Get in touch and I will confirm the exact address and the best time to visit.',
+    a: 'In a boutique gym that I manage in Bush Hill Park, Enfield. Get in touch and I will confirm the exact address and the best time to visit.',
   },
   {
     q: 'Is the app extra?',

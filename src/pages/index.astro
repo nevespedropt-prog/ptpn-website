@@ -160,6 +160,8 @@ header.solid{background:rgba(8,8,10,.82);backdrop-filter:blur(16px);border-botto
 .step{min-height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
   opacity:.18;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .step.active{opacity:1;transform:none}
+.btn .sm{display:none}
+.btn .lg{display:inline}
 .step h3{display:flex;flex-direction:column;align-items:center;gap:12px;font-size:clamp(30px,4.2vw,54px);line-height:1.08;
   text-shadow:0 2px 28px #000,0 0 3px rgba(0,0,0,.8)}
 .step h3 i{font-family:var(--mono);font-size:13px;font-style:normal;letter-spacing:.2em;color:var(--gold)}
@@ -312,6 +314,14 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   .pad{padding:74px 0}
   .hero__scroll{display:none}
   .stack{padding-bottom:0}
+  .btn .lg{display:none}
+  .btn .sm{display:inline}
+  .nav .btn--sm{padding:12px 14px;font-size:14px}
+  .wrap .wrap{padding-left:0;padding-right:0}
+  .coachline{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:0 18px}
+  .coachline i{display:none}
+  .step{background:radial-gradient(ellipse 90% 34% at 50% 50%,rgba(8,8,10,.78),rgba(8,8,10,0))}
+  .phone{opacity:.3}
 }
 @media (prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none}
@@ -349,7 +359,7 @@ footer li{margin:0}
     </ul>
     <div class="nav__r">
       <a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>
-      <a class="btn btn--sm magnetic" href="#contact">Book a free consultation</a>
+      <a class="btn btn--sm magnetic" href="#contact"><span class="lg">Book a free consultation</span><span class="sm">Free consultation</span></a>
     </div>
   </div>
 </header>
@@ -568,7 +578,7 @@ footer li{margin:0}
       </div>
       <div><h5>Coaching</h5><ul><li><a class="ul" href="#packages">Personal training</a></li><li><a class="ul" href="#method">The method</a></li><li><a class="ul" href="#packages">Packages</a></li><li><a class="ul" href="#packages">Duo</a></li></ul></div>
       <div><h5>More</h5><ul><li><a class="ul" href="#coach">Your coach</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">The app</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a></li><li><a class="ul" href="./admin">Admin</a></li></ul></div>
-      <div><h5>Contact</h5><ul><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href="#contact">Book a consultation</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href="#contact">Book a free consultation</a></li></ul></div>
     </div>
     <div class="foot__bar"><span>© 2026 PTPN</span><span>Bush Hill Park, Enfield, London</span></div>
   </div>

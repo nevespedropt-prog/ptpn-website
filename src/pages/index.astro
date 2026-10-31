@@ -315,7 +315,10 @@ footer{border-top:1px solid var(--line);padding:66px 0 40px;background:#0b0b0e}
   .hero__scroll{display:none}
   .stack{padding-bottom:0}
   .btn .lg{display:none}
-  body.past-hero .nav__r .btn{display:none}
+  /* scrolling through the hero: the button slides off to the right and the logo glides to the centre */
+  .nav>a{will-change:transform;transform:translateX(calc(var(--hp,0) * (50vw - var(--gut) - 59px)))}
+  .nav__r{transform:translateX(calc(var(--hp,0) * 170%));opacity:calc(1 - var(--hp,0) * 1.5)}
+  body.past-hero .nav__r{pointer-events:none}
   .btn .sm{display:inline}
   .nav .btn--sm{padding:12px 14px;font-size:14px}
   .wrap .wrap{padding-left:0;padding-right:0}
@@ -778,6 +781,10 @@ import Lenis from 'lenis';
     scrollTrigger:{ trigger:'.split', start:'top 78%', once:true } });
   gsap.fromTo('#coachImg', { yPercent:-6 }, { yPercent:6, ease:'none',
     scrollTrigger:{ trigger:'.split', start:'top bottom', end:'bottom top', scrub:true } });
+
+  /* header: progress through the hero drives --hp (0 at the top, 1 once the hero is gone) */
+  ScrollTrigger.create({ trigger:'.hero', start:'top top', end:'bottom top+=90', onUpdate:function(self){
+    doc.style.setProperty('--hp', self.progress.toFixed(3)); } });
 
   /* phone booking bar: out of the way while the hero or the form is on screen */
   var mbar = document.querySelector('.mbar'), seen = { hero:false, form:false };

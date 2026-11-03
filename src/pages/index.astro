@@ -410,6 +410,7 @@ footer li{margin:0}
       <li><a class="ul" href="#method">The method</a></li>
       <li><a class="ul" href="#app">The app</a></li>
       <li><a class="ul" href="#results">Results</a></li>
+      <li><a class="ul" href="./blog/">Blog</a></li>
     </ul>
     <div class="nav__r">
       <a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>
@@ -425,6 +426,7 @@ footer li{margin:0}
   <a class="dl" href="#method">The method</a>
   <a class="dl" href="#app">The app</a>
   <a class="dl" href="#results">Results</a>
+  <a class="dl" href="./blog/">Blog</a>
   <a class="dl dl--sub" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a>
   <a class="btn" href="#contact">Book a free consultation</a>
   <div class="drawer__social"><a href={site.whatsapp} rel="noopener">WhatsApp</a><a href={site.instagram} rel="noopener">Instagram</a><a href={site.facebook} rel="noopener">Facebook</a></div>
@@ -463,8 +465,8 @@ footer li{margin:0}
 <!-- ================= STATS ================= -->
 <div class="wrap">
   <div class="stats">
-    <div class="rv"><b data-count="10" data-suffix="+">0</b><span>Years coaching</span></div>
-    <div class="rv"><b data-count="10000" data-suffix="+">0</b><span>Sessions delivered</span></div>
+    <div class="rv"><b data-count="10" data-suffix="+">10+</b><span>Years coaching</span></div>
+    <div class="rv"><b data-count="10000" data-suffix="+">10,000+</b><span>Sessions delivered</span></div>
     <div class="rv"><b>1:1</b><span>Or a pair, never a crowd</span></div>
     <div class="rv"><b>£0</b><span>App, included</span></div>
   </div>
@@ -633,7 +635,7 @@ footer li{margin:0}
         <p>One-to-one personal training in Bush Hill Park, Enfield. Programmed for you, measured every session.</p>
       </div>
       <div><h5>Coaching</h5><ul><li><a class="ul" href="#packages">Personal training</a></li><li><a class="ul" href="#method">The method</a></li><li><a class="ul" href="#packages">Packages</a></li><li><a class="ul" href="#packages">Duo</a></li></ul></div>
-      <div><h5>More</h5><ul><li><a class="ul" href="#coach">Your coach</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">The app</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a></li><li><a class="ul" href="./admin">Admin</a></li></ul></div>
+      <div><h5>More</h5><ul><li><a class="ul" href="#coach">Your coach</a></li><li><a class="ul" href="./blog/">Blog</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">The app</a></li><li><a class="ul" href="https://nevespedropt-prog.github.io/PTPN/">Member log in</a></li><li><a class="ul" href="./admin">Admin</a></li></ul></div>
       <div><h5>Contact</h5><ul><li><a class="ul" href={`tel:${site.phoneTel}`}>{site.phone}</a></li><li><a class="ul" href={site.whatsapp} rel="noopener">WhatsApp</a></li><li><a class="ul" href="mailto:info@ptpn.co.uk">info@ptpn.co.uk</a></li><li><a class="ul" href={site.instagram} rel="noopener">Instagram</a></li><li><a class="ul" href={site.facebook} rel="noopener">Facebook</a></li><li><a class="ul" href="#contact">Book a free consultation</a></li></ul></div>
     </div>
     <div class="foot__bar"><span>© 2026 PTPN</span><span>Bush Hill Park, Enfield, London</span></div>
@@ -656,6 +658,7 @@ import Lenis from 'lenis';
   }
   function countUp(el, dur){
     var to = parseFloat(el.dataset.count), o = { v: parseFloat(el.dataset.from || '0') };
+    fmtCount(el, o.v);
     gsap.to(o, { v: to, duration: dur || 1.7, ease: 'power2.out', overwrite: true, onUpdate: function(){ fmtCount(el, o.v); } });
   }
 
@@ -785,8 +788,6 @@ import Lenis from 'lenis';
 
   /* ---------- count-ups ---------- */
   gsap.utils.toArray('[data-count]').filter(function(el){ return !el.closest('.sface'); }).forEach(function(el){
-    el.textContent = '0';
-    fmtCount(el, parseFloat(el.dataset.from || '0'));
     ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: function(){ countUp(el, 1.7); } });
   });
 

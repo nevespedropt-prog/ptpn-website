@@ -1,0 +1,51 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { sortedPosts, categories, type CategoryKey } from '../../../data/posts';
+export function getStaticPaths() {
+  return (Object.keys(categories) as CategoryKey[])
+    .filter((k) => sortedPosts.some((p) => p.category === k))
+    .map((k) => ({ params: { category: k }, props: { key: k } }));
+}
+const { key } = Astro.props as { key: CategoryKey };
+const cat = categories[key];
+const list = sortedPosts.filter((p) => p.category === key);
+const keys = (Object.keys(categories) as CategoryKey[]).filter((k) => sortedPosts.some((p) => p.category === k));
+const fmt = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title={`${cat.title} | PTPN Blog`} description={`${cat.blurb} From Pedro, a personal trainer in Enfield.`}>
+  <section style="padding-block:96px 28px"><div class="wrap">
+    <span class="eyebrow">Blog</span>
+    <h1 style="margin-top:18px;font-size:clamp(34px,4.6vw,56px)">{cat.title}</h1>
+    <p class="lede" style="margin-top:18px">{cat.blurb}</p>
+    <nav class="chips" aria-label="Blog categories">
+      <a class="chip" href="../../">All</a>
+      {keys.map((k) => <a class={`chip${k === key ? ' on' : ''}`} href={`../${k}/`}>{categories[k].label}</a>)}
+    </nav>
+  </div></section>
+  <section style="padding-block:0 110px"><div class="wrap">
+    <div class="blog-grid">
+      {list.map((p) => (
+        <article>
+          <span class="cat">{categories[p.category].label}</span>
+          <h2><a href={`../../${p.slug}/`}>{p.title}</a></h2>
+          <p>{p.summary}</p>
+          <span class="mono">{fmt(p.date)} · {p.minutes} min read</span>
+        </article>
+      ))}
+    </div>
+  </div></section>
+</Base>
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+  .chip{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:11px 16px;border-radius:999px}
+  .chip.on,.chip:hover{color:var(--gold-light);border-color:var(--gold-deep)}
+  .blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .blog-grid article{border:1px solid var(--line);border-left:2px solid var(--gold);background:var(--card);padding:34px 30px;display:flex;flex-direction:column;gap:12px;position:relative}
+  .blog-grid .cat{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .blog-grid h2{font-size:22px;letter-spacing:-.015em}
+  .blog-grid h2 a::after{content:"";position:absolute;inset:0}
+  .blog-grid p{color:var(--muted);font-size:15.5px;line-height:1.65;flex:1}
+  .blog-grid .mono{color:var(--faint);font-size:12px}
+  .blog-grid article:hover{border-color:var(--gold-deep)}
+  @media (max-width:760px){.blog-grid{grid-template-columns:1fr}.blog-grid article,.chips{text-align:center}.chips{justify-content:center}.blog-grid article{align-items:center}}
+</style>

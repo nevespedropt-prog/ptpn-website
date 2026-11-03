@@ -1,6 +1,15 @@
 // Blog posts. Body strings starting with "## " are subheadings, everything else is a paragraph.
+export type CategoryKey = 'training' | 'nutrition' | 'workouts' | 'news';
+export const categories: Record<CategoryKey, { label: string; title: string; blurb: string }> = {
+  training: { label: 'Training', title: 'Personal training advice', blurb: 'Getting started, strength training, and training with knees, backs and other things people tell you to avoid.' },
+  nutrition: { label: 'Nutrition', title: 'Nutrition and fat loss advice', blurb: 'Fat loss, protein and eating in a way you can keep up.' },
+  workouts: { label: 'Workouts', title: 'Workouts you can follow', blurb: 'Full sessions to follow at the gym or at home.' },
+  news: { label: 'News and events', title: 'PTPN news and events', blurb: 'Announcements from PTPN, including events and new packages.' },
+};
+
 export type Post = {
   slug: string;
+  category: CategoryKey;
   title: string;
   summary: string;
   date: string; // ISO
@@ -10,7 +19,52 @@ export type Post = {
 
 export const posts: Post[] = [
   {
+    slug: 'full-body-workout-30-minutes',
+    category: 'workouts',
+    title: 'A 30-minute full-body workout',
+    summary: 'Five exercises, 30 minutes, and a way to make it harder each week. Works at the gym or at home.',
+    date: '2026-11-03',
+    minutes: 4,
+    body: [
+      'This is the session I give people who say they only have half an hour. It trains your legs, back, chest and trunk, it needs very little equipment, and you can repeat it twice a week without it becoming stale.',
+      '## Warm up for five minutes',
+      'Walk or cycle easily for two minutes, then do ten slow bodyweight squats, ten hip hinges with your hands on your thighs, and ten arm circles each way. You should feel warm, not tired.',
+      '## The circuit',
+      'Do each exercise for 10 reps, then move to the next one. Rest for a minute after the last exercise and repeat the whole circuit. Aim for three rounds.',
+      'Goblet squat: hold a dumbbell or kettlebell at your chest, sit back and down until your thighs are about parallel to the floor, then stand up.',
+      'Press-up: do them on your knees, or with your hands on a bench or a kitchen worktop if a full press-up is too hard.',
+      'Romanian deadlift: hold the weights in front of your thighs, push your hips back with a flat back until you feel your hamstrings stretch, then stand tall.',
+      'One-arm row: rest one hand on a bench and pull the weight up towards your hip. Do all your reps on one side, then swap.',
+      'Plank: hold for 30 seconds on your forearms with your body in a straight line.',
+      '## Choose the weight',
+      'Pick a weight where the last two reps of each set feel hard but your technique stays clean. If you could easily do five more, go heavier next time.',
+      '## Make it harder each week',
+      'Change one thing at a time. Add a rep to each exercise, or use a slightly heavier weight, or add a fourth round. Write down what you did so you know what to beat next time.',
+      '## When to skip it',
+      'If something hurts in a sharp way, stop that exercise and swap it for an easier version. If you have a medical condition or an injury, check with your GP before you start.',
+      'If you want a session written around your goal and your body, book a free consultation and we will talk it through.',
+    ],
+  },
+  {
+    slug: 'new-ptpn-website-and-app',
+    category: 'news',
+    title: 'The new PTPN website and app',
+    summary: 'What is on the new site, where to find the packages, and where events and announcements will be posted.',
+    date: '2026-11-03',
+    minutes: 2,
+    body: [
+      'The new PTPN website is live. You can see every package and its price in one place, read what clients say, and book a free consultation from any page.',
+      '## What you will find here',
+      'This blog is where I will post training and nutrition advice, full workouts you can follow, and announcements. When I run an event, or open spots on a package such as Duo, it will be posted here first.',
+      '## The app',
+      'The PTPN app is included with coaching. It holds your programme, your logging and your progress, and it costs nothing on top of your package. Clients can sign in from the Member log in link in the menu.',
+      '## Stay in touch',
+      'You can follow PTPN on Instagram and Facebook, or message me on WhatsApp on 07459 020381. If you would like to talk about training, book a free consultation and tell me what you want to change.',
+    ],
+  },
+  {
     slug: 'getting-started-after-years-off',
+    category: 'training',
     title: 'Getting started after years off',
     summary: 'What a sensible first 12 weeks looks like when you have not trained properly in a long time.',
     date: '2026-10-31',
@@ -34,6 +88,7 @@ export const posts: Post[] = [
   },
   {
     slug: 'training-with-bad-knees-and-backs',
+    category: 'training',
     title: 'Knees, backs and other opinions',
     summary: 'How to train with the things people say you should stop doing, and when to genuinely stop.',
     date: '2026-10-31',
@@ -54,6 +109,7 @@ export const posts: Post[] = [
   },
   {
     slug: 'fat-loss-without-misery',
+    category: 'nutrition',
     title: 'Fat loss without misery',
     summary: 'Why sticking with a plan beats the diet of the month, and what that looks like week to week.',
     date: '2026-10-31',
@@ -77,6 +133,7 @@ export const posts: Post[] = [
   },
   {
     slug: 'strength-training-over-40',
+    category: 'training',
     title: 'Strength for normal people',
     summary: 'What to expect from a bar, a kettlebell or your own body at 40, 50 and beyond.',
     date: '2026-10-31',
@@ -99,3 +156,5 @@ export const posts: Post[] = [
     ],
   },
 ];
+
+export const sortedPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date));

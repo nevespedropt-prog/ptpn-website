@@ -1,5 +1,7 @@
 ---
 import { site, coach } from '../data/site';
+const depth = Astro.url.pathname.split('/').filter(Boolean).length;
+const up = depth ? '../'.repeat(depth) : './';
 const year = new Date().getFullYear();
 ---
 
@@ -7,18 +9,18 @@ const year = new Date().getFullYear();
   <div class="wrap">
     <div class="ftr__grid">
       <div class="ftr__brand">
-        <a href="/" aria-label="PTPN, back to site top"><img src="../brand/ptpn-lockup-520.png" alt="PTPN, Be fit" width="520" height="227" /></a>
+        <a href={up} aria-label="PTPN, back to site top"><img src={up + 'brand/ptpn-lockup-520.png'} alt="PTPN, Be fit" width="520" height="227" /></a>
         <p>Personal training in Enfield. Programmed, measured, and built to last longer than your motivation.</p>
       </div>
 
       <div>
         <h2 class="ftr__h">Explore</h2>
         <ul>
-          <li><a href="../#coach">Coach</a></li>
-          <li><a href="../#method">Method</a></li>
-          <li><a href="../#results">Clients</a></li>
-          <li><a href="../#app">App</a></li>
-          <li><a href="../#packages">Packages</a></li>
+          <li><a href={up + "#coach"}>Coach</a></li>
+          <li><a href={up + "#method"}>Method</a></li>
+          <li><a href={up + "#results"}>Clients</a></li>
+          <li><a href={up + "#app"}>App</a></li>
+          <li><a href={up + "#packages"}>Packages</a></li>
         </ul>
       </div>
 
@@ -30,7 +32,7 @@ const year = new Date().getFullYear();
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
           <li><a href={site.instagram} rel="noopener">Instagram</a></li>
           <li><a href={site.facebook} rel="noopener">Facebook</a></li>
-          <li><a href="../#contact">Free consultation</a></li>
+          <li><a href={up + "#contact"}>Free consultation</a></li>
           <li>{site.area}</li>
         </ul>
       </div>

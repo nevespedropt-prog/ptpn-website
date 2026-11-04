@@ -35,6 +35,9 @@ const fmt = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numer
     </div>
   </div></section>
 </Base>
+<script>
+  import '../../../scripts/blog-motion';
+</script>
 <style>
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
   .chip{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:11px 16px;border-radius:999px}
@@ -46,6 +49,7 @@ const fmt = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numer
   .blog-grid h2 a::after{content:"";position:absolute;inset:0}
   .blog-grid p{color:var(--muted);font-size:15.5px;line-height:1.65;flex:1}
   .blog-grid .mono{color:var(--faint);font-size:12px}
-  .blog-grid article:hover{border-color:var(--gold-deep)}
+  .blog-grid article{transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .3s}
+  .blog-grid article:hover{border-color:var(--gold-deep);transform:translateY(-4px)}
   @media (max-width:760px){.blog-grid{grid-template-columns:1fr}.blog-grid article,.chips{text-align:center}.chips{justify-content:center}.blog-grid article{align-items:center}}
 </style>

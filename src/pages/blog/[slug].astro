@@ -43,11 +43,20 @@ const schema = [
     <div class="post">
       {post.body.map((b) => b.startsWith('## ') ? <h2>{b.slice(3)}</h2> : <p>{b}</p>)}
     </div>
-    <div class="post-cta">
-      <h2>Book a free consultation</h2>
-      <p>No charge, no obligation. Tell me what you want to change and I will tell you honestly whether I can help.</p>
-      <a class="btn" href="../../#contact">Book a free consultation</a>
-    </div>
+    {post.sources && (
+      <aside class="sources">
+        <h2>Sources</h2>
+        <ul>{post.sources.map((x) => <li>{x}</li>)}</ul>
+        <p>General information, not medical advice. If you have a health condition, speak to your GP before starting exercise.</p>
+      </aside>
+    )}
+    {post.cta && (
+      <div class="post-cta">
+        <h2>Book a free consultation</h2>
+        <p>{post.cta}</p>
+        <a class="btn" href="../../#contact">Book a free consultation</a>
+      </div>
+    )}
     <div class="more">
       <h2>More from the blog</h2>
       <div class="more__grid">
@@ -58,6 +67,9 @@ const schema = [
     </div>
   </div></article>
 </Base>
+<script>
+  import '../../scripts/blog-motion';
+</script>
 <style>
   .back{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:inline-block;padding:10px 0}
   .cat{margin-top:22px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
@@ -69,6 +81,10 @@ const schema = [
   .post-cta{margin-top:56px;border:1px solid var(--line);border-left:2px solid var(--gold);background:var(--card);padding:34px 32px}
   .post-cta h2{font-size:24px}
   .post-cta p{color:var(--muted);margin:12px 0 22px;line-height:1.65}
+  .sources{margin-top:44px;border-top:1px solid var(--line);padding-top:24px;color:var(--muted);font-size:14.5px;line-height:1.7}
+  .sources h2{font-size:14px;font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  .sources ul{padding-left:18px;margin:0 0 12px}
+  .sources p{font-style:italic}
   .more{margin-top:64px}
   .more h2{font-size:22px;margin-bottom:18px}
   .more__grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -76,5 +92,5 @@ const schema = [
   .more__grid a:hover{border-color:var(--gold-deep)}
   .more__grid span{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
   .more__grid b{font-family:var(--display);font-size:17px;line-height:1.3}
-  @media (max-width:760px){.more__grid{grid-template-columns:1fr}.post-cta,.more{text-align:center}.cat{text-align:center}.back{display:block;text-align:center}article h1,article .fine{text-align:center}}
+  @media (max-width:760px){.more__grid{grid-template-columns:1fr}.post-cta,.more,.sources{text-align:center}.sources ul{list-style:none;padding-left:0}.cat{text-align:center}.back{display:block;text-align:center}article h1,article .fine{text-align:center}}
 </style>

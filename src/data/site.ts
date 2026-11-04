@@ -202,9 +202,10 @@ export const faqs = [
 ];
 
 export const nav = [
-  { href: '../#packages', label: 'Personal training' },
-  { href: '../#method', label: 'How it works' },
-  { href: '../#coach', label: 'Your coach' },
-  { href: '../#app', label: 'The app' },
+  { href: '../#coach', label: 'Coach' },
+  { href: '../#method', label: 'Method' },
+  { href: '../#results', label: 'Clients' },
+  { href: '../#app', label: 'App' },
+  { href: '../#packages', label: 'Packages' },
   { href: '../blog', label: 'Blog' },
 ];

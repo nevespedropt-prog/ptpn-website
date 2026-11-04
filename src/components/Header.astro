@@ -1,18 +1,21 @@
 ---
 import { nav, site } from '../data/site';
 const path = Astro.url.pathname;
+const depth = path.split('/').filter(Boolean).length;
+const up = depth ? '../'.repeat(depth) : './';
+const fix = (h: string) => up + h.replace(/^\.\.\//, '');
 const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
 ---
 
 <header class="hdr" id="hdr">
   <div class="wrap hdr__inner">
-    <a class="hdr__brand" ".." aria-label="PTPN, home">
-      <img src="../brand/ptpn-lockup-520.png" alt="PTPN, Be fit" width="520" height="227" />
+    <a class="hdr__brand" href={up} aria-label="PTPN, home">
+      <img src={up + 'brand/ptpn-lockup-520.png'} alt="PTPN, Be fit" width="520" height="227" />
     </a>
 
     <nav class="hdr__nav" aria-label="Main">
       {nav.map((item) => (
-        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+        <a href={fix(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
       ))}
     </nav>
 
@@ -28,7 +31,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
 
   <div class="drawer" id="drawer" hidden>
     <nav class="wrap drawer__nav" aria-label="Mobile">
-      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      {nav.map((item) => <a href={fix(item.href)}>{item.label}</a>)}
       <a href="#contact">Free consultation</a>
       <a class="drawer__login" href={site.appPath}>Member log in</a>
     </nav>

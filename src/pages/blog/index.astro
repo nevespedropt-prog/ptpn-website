@@ -15,6 +15,7 @@ const keys = Object.keys(categories) as CategoryKey[];
     <nav class="chips" aria-label="Blog categories">
       <a class="chip on" href="./">All</a>
       {keys.map((k) => <a class="chip" href={`./category/${k}/`}>{categories[k].label}</a>)}
+      <a class="chip" href="./rss.xml">RSS</a>
     </nav>
   </div></section>
   <section style="padding-block:0 110px"><div class="wrap">

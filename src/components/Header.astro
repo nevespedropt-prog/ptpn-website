@@ -4,6 +4,8 @@ const path = Astro.url.pathname;
 const depth = path.split('/').filter(Boolean).length;
 const up = depth ? '../'.repeat(depth) : './';
 const fix = (h: string) => up + h.replace(/^\.\.\//, '');
+// the enquiry form lives on the home page and on /contact; every other page links to the home page form
+const consult = path.startsWith('/contact') ? '#contact' : up + '#contact';
 const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
 ---
 
@@ -21,7 +23,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
 
     <div class="hdr__cta">
       <a class="hdr__login" href={site.appPath}>Member log in</a>
-      <a class="btn btn--primary btn--sm" href="#contact">Free consultation</a>
+      <a class="btn btn--primary btn--sm" href={consult}>Free consultation</a>
     </div>
 
     <button class="hdr__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
@@ -32,7 +34,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
   <div class="drawer" id="drawer" hidden>
     <nav class="wrap drawer__nav" aria-label="Mobile">
       {nav.map((item) => <a href={fix(item.href)}>{item.label}</a>)}
-      <a href="#contact">Free consultation</a>
+      <a href={consult}>Free consultation</a>
       <a class="drawer__login" href={site.appPath}>Member log in</a>
     </nav>
   </div>

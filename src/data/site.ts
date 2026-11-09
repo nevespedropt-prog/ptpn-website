@@ -11,7 +11,7 @@ export const site = {
   whatsapp: 'https://wa.me/447459020381',
   instagram: 'https://www.instagram.com/pedroneves.pt/',
   facebook: 'https://www.facebook.com/ptpedroneves',
-  appPath: 'https://nevespedropt-prog.github.io/PTPN/',
+  appPath: 'https://app.ptpn.co.uk/',
   area: 'Bush Hill Park, Enfield, London',
   areaShort: 'Enfield',
   title: 'PTPN | Personal Training in Enfield | Be fit',

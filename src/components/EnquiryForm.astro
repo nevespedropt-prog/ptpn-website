@@ -4,6 +4,7 @@ import { packages, duo, site } from '../data/site';
 const goals = ['Lose fat', 'Build muscle', 'Improve my health', 'Strength & performance'];
 const freq = ['Once a week', '2–3 times a week', '4+ times a week'];
 const genders = ['Male', 'Female', 'Prefer not to say'];
+const waLink = `${site.whatsapp}?text=${encodeURIComponent("Hi Pedro, I'd like to book a free consultation.")}`;
 const gbp = (n: number) => (Number.isInteger(n) ? `£${n}` : `£${n.toFixed(2)}`);
 const options = [
   'Not sure yet, advise me',
@@ -52,8 +53,9 @@ const options = [
           <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" />
         </div>
         <div>
-          <label for="phone">Phone number (optional)</label>
-          <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="07700 900 000" />
+          <label for="phone">Phone number <span class="enq__req">*</span></label>
+          <input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="07700 900 000" />
+          <small class="enq__hint">So I can reach you on WhatsApp or by phone.</small>
         </div>
       </div>
 
@@ -108,6 +110,10 @@ const options = [
 
       <button class="btn btn--primary btn--block" type="submit" id="enquiry-submit">Book a free consultation</button>
       <p class="enq__status" id="enquiry-status" role="status" aria-live="polite"></p>
+      <div class="enq__wa">
+        <p>Prefer to talk now? Skip the form and message or call me on WhatsApp.</p>
+        <a class="btn btn--ghost btn--block" href={waLink} target="_blank" rel="noopener">Message or call on WhatsApp</a>
+      </div>
       <p class="fine">
         I reply to every enquiry personally, usually within one working day. Your details are only used
         to answer you and, if you tick the boxes above, to send what you asked for.
@@ -144,6 +150,7 @@ const options = [
     const message = String(fd.get('message') ?? '').trim();
     if (!fname || !lname) { say('Please enter your first and last name.', false); return; }
     if (!email || !email.includes('@')) { say('Please enter a valid email.', false); return; }
+    if (phone.replace(/\D/g, '').length < 7) { say('Please enter a phone number so I can reach you.', false); return; }
     if (!goal) { say('Please pick your main goal.', false); return; }
     if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
     say('', true);
@@ -182,7 +189,7 @@ const options = [
     padding-bottom: 12px; border-bottom: 1px solid rgba(215,185,120,.18); margin-top: 14px; }
   .enq__sec:first-child { margin-top: 0; }
   .enq__req { color: #d7b978; }
-  .enq__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .enq__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
   .enq__set { border: 0; padding: 0; margin: 0; }
   .enq__set legend { font-family: 'IBM Plex Mono', monospace; font-size:12px; letter-spacing: .18em;
     text-transform: uppercase; color: #8d8d93; margin-bottom: 11px; padding: 0; }
@@ -209,6 +216,9 @@ const options = [
   .enq__check input { width: 20px; height: 20px; min-height: 0; padding: 0; flex: 0 0 20px;
     accent-color: #d7b978; margin-top: 2px; }
 
+  .enq__hint { display: block; margin-top: 6px; font-size: 12.5px; color: #8d8d93; }
+  .enq__wa { display: grid; gap: 12px; margin-top: 4px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.10); text-align: center; }
+  .enq__wa p { margin: 0; font-size: 14.5px; color: #b9b5ac; }
   .enq__status { font-size: 14px; min-height: 1.2em; margin: 2px 0 0; }
   .enq__status[data-ok="0"] { color: #f0a0a0; }
   .enq__status[data-ok="1"] { color: #f1dda9; }
